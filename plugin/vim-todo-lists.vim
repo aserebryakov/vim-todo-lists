@@ -32,7 +32,7 @@ function! VimTodoListsInit()
   nnoremap <buffer> O O  [ ] 
   nnoremap <buffer> j $/^  \[.\]<CR>:noh<CR> f f 
   nnoremap <buffer> k 0?^  \[.\]<CR>:noh<CR> f f 
-  nnoremap <buffer> <Space> :call VimTodoListsToggleItem()<CR>
+  nnoremap <buffer> <Space> :silent call VimTodoListsToggleItem()<CR>
   inoremap <buffer> <CR> <CR>  [ ] 
 endfunction
 
