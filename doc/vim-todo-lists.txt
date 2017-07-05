@@ -1,0 +1,124 @@
+*vim-todo-lists.txt*    Version 0.1.0
+*vim-todo-lists*
+
+Plugin for TODO lists management.
+
+==============================================================================
+CONTENTS                                                  *VimTodoListsContents*
+
+    1. Introduction .... |VimTodoListsIntroduction|
+    2. Installation .... |VimTodoListsInstallation|
+    3. Usage ........... |VimTodoListsUsage|
+    4. Contribution .... |VimTodoListsContribution|
+    5. Future Features.. |VimTodoListsFutureFeatures|
+    6. License ......... |VimTodoListsLicense|
+    7. Changelog ....... |VimTodoListsChangelog|
+    8. Credits ......... |VimTodoListsCredits|
+
+==============================================================================
+1. Introduction                                       *VimTodoListsIntroduction*
+
+vim-todo-lists plugin is intended for TODO lists management.
+
+Current version contains only key bindings that simplify the navigation
+between TODO list (should have '.todo' extension) items, creation and update.
+
+See |VimTodoListsFutureFeatures|.
+
+==============================================================================
+2. Installation                                       *VimTodoListsInstallation*
+
+Pathogen:
+>
+    $ cd ~/.vim/bundle
+    $ git clone https://github.com/aserebryakov/vim-todo-lists.git
+<
+NeoBundle:
+>
+    NeoBundle 'aserebryakov/vim-todo-lists'
+<
+Without plugin manager:
+
+    Clone or download this repository and copy its contents to your ~/.vim/
+    directory.
+
+==============================================================================
+3. Usage                                                     *VimTodoListsUsage*
+
+Plugin is automatically applied for files with `.todo` extension.
+
+Key bindings in item editing mode
+---------------------------------
+
+    * j - go to next item
+    * k - go to previous item
+    * o - create new item above the cursor
+    * O - create new item below the cursor
+    * <Space> - toggle current item
+    * <CR> - create new item in insert mode
+    * <leader>e - switch to normal editing mode
+
+Key bindings in normal editing mode
+---------------------------------
+
+    * j, k, o, O, <CR> - no special behavior
+    * <Space> - toggle current item
+    * <leader>e - switch to item editing mode
+
+==============================================================================
+4. Future Features                                  *VimTodoListsFutureFeatures*
+
+* TODO lists folder selection
+* Create new TODO list
+* Archive current TODO list in the folder
+* Show archived lists
+* Open list from archive
+
+==============================================================================
+5. Contribution                                       *VimTodoListsContribution*
+
+Source code and issues are hosted on GitHub:
+
+    https://github.com/aserebryakov/vim-todo-lists
+
+==============================================================================
+6. License                                                 *VimTodoListsLicense*
+
+MIT License
+
+Copyright (c) 2017 Alexander Serebryakov (alex.serebr@gmail.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+==============================================================================
+7. Changelog                                             *VimTodoListsChangelog*
+
+0.1.0
+
+* Easy navigation in TODO list
+* Easy adding new items
+* Easy items toggling
+
+==============================================================================
+8. Credits                                                 *VimTodoListsCredits*
+
+* Alexander Serebryakov (author)  https://github.com/aserebryakov
+
+==============================================================================
+# vim:tw=78:ts=8:ft=help:norl:
