@@ -28,11 +28,29 @@ function! VimTodoListsInit()
   setlocal shiftwidth=2 expandtab
   setlocal cursorline
   setlocal noautoindent
+  call VimTodoListsSetItemMode()
+endfunction
+
+
+" Sets mapping for normal navigation and editing mode
+function! VimTodoListsSetNormalMode()
+  nunmap <buffer> o
+  nunmap <buffer> O
+  nunmap <buffer> j
+  nunmap <buffer> k
+  nnoremap <buffer> <Space> :silent call VimTodoListsToggleItem()<CR>
+  noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
+endfunction
+
+
+" Sets mappings for faster item navigation and editing
+function! VimTodoListsSetItemMode()
   nnoremap <buffer> o o  [ ] 
   nnoremap <buffer> O O  [ ] 
   nnoremap <buffer> j $/^  \[.\]<CR>:noh<CR> f f 
   nnoremap <buffer> k 0?^  \[.\]<CR>:noh<CR> f f 
   nnoremap <buffer> <Space> :silent call VimTodoListsToggleItem()<CR>
+  noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
   inoremap <buffer> <CR> <CR>  [ ] 
 endfunction
 
