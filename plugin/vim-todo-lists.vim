@@ -72,8 +72,13 @@ endfunction
 if !exists('g:vimtodolists_plugin')
   let g:vimtodolists_plugin = 1
 
+  if exists('vimtodolists_auto_commands')
+    echoerr 'VimTodoLists: vimtodolists_auto_commands group already exists'
+    exit
+  endif
+
   "Defining auto commands
-  augroup filestyle_auto_commands
+  augroup vimtodolists_auto_commands
     autocmd!
     autocmd BufRead,BufNewFile *.todo call VimTodoListsInit()
   augroup end

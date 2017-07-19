@@ -75,6 +75,10 @@ Changelog
 * Easy adding new items
 * Easy items toggling
 
+#### 0.1.1
+
+* Fixes broken compatibility with the [filestyle](https://github.com/aserebryakov/filestyle) plugin
+
 Credits
 -------
 
