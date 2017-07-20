@@ -45,13 +45,54 @@ endfunction
 
 " Sets mappings for faster item navigation and editing
 function! VimTodoListsSetItemMode()
-  nnoremap <buffer> o o  [ ] 
-  nnoremap <buffer> O O  [ ] 
-  nnoremap <buffer> j $/^  \[.\]<CR>:noh<CR> f f 
-  nnoremap <buffer> k 0?^  \[.\]<CR>:noh<CR> f f 
-  nnoremap <buffer> <Space> :silent call VimTodoListsToggleItem()<CR>
+  nnoremap <buffer> o :VimTodoListsCreateNewItemBelow<CR>
+  nnoremap <buffer> O :VimTodoListsCreateNewItemAbove<CR>
+  nnoremap <buffer> j :VimTodoListsGoToNextItem<CR>
+  nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
+  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
-  inoremap <buffer> <CR> <CR>  [ ] 
+  inoremap <buffer> <CR> <CR><ESC>:VimTodoListsCreateNewItem<CR>
+endfunction
+
+
+" Creates a new item above the current line
+function! VimTodoListsCreateNewItemAbove()
+  normal! O  [ ] 
+  startinsert!
+endfunction
+
+
+" Creates e new item below the current line
+function! VimTodoListsCreateNewItemBelow()
+  normal! o  [ ] 
+  startinsert!
+endfunction
+
+
+" Creates e new item in the current line
+function! VimTodoListsCreateNewItem()
+  normal! 0i  [ ] 
+  startinsert!
+endfunction
+
+
+" Moves te cursor to the next item
+function! VimTodoListsGoToNextItem()
+  normal! $
+  silent exec '/^  \[.\]'
+  silent exec 'noh'
+  normal! f[
+  normal! l
+endfunction
+
+
+" Moves te cursor to the previous item
+function! VimTodoListsGoToPreviousItem()
+  normal! 0
+  silent exec '?^  \[.\]'
+  silent exec 'noh'
+  normal! f[
+  normal! l
 endfunction
 
 
@@ -84,5 +125,11 @@ if !exists('g:vimtodolists_plugin')
   augroup end
 
   "Defining plugin commands
+  command! VimTodoListsToggleItem silent call VimTodoListsToggleItem()
+  command! VimTodoListsCreateNewItemAbove silent call VimTodoListsCreateNewItemAbove()
+  command! VimTodoListsCreateNewItemBelow silent call VimTodoListsCreateNewItemBelow()
+  command! VimTodoListsCreateNewItem silent call VimTodoListsCreateNewItem()
+  command! VimTodoListsGoToNextItem silent call VimTodoListsGoToNextItem()
+  command! VimTodoListsGoToPreviousItem silent call VimTodoListsGoToPreviousItem()
 endif
 
