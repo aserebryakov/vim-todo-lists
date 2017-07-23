@@ -50,7 +50,8 @@ Plugin is automatically applied for files with `.todo` extension.
 TODO Items
 ----------
 
-The '  [ ] ' sequence of characters marks a line as a TODO list item.
+The sequence matching the expression '^  [ ] ' marks a line as a TODO list
+item.
 
 Example
 -------
