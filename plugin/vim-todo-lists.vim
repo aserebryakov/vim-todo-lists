@@ -28,7 +28,19 @@ function! VimTodoListsInit()
   setlocal shiftwidth=2 expandtab
   setlocal cursorline
   setlocal noautoindent
-  call VimTodoListsSetItemMode()
+
+  if exists('g:VimTodoListsCustomKeyMapper')
+    try
+      call call(g:VimTodoListsCustomKeyMapper, [])
+    catch
+      echo 'VimTodoLists: Error in custom key mapper.'
+           \.' Falling back to default mappings'
+      call VimTodoListsSetItemMode()
+    endtry
+  else
+    call VimTodoListsSetItemMode()
+  endif
+
 endfunction
 
 
