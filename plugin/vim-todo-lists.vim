@@ -137,11 +137,11 @@ if !exists('g:vimtodolists_plugin')
   augroup end
 
   "Defining plugin commands
-  command! VimTodoListsToggleItem silent call VimTodoListsToggleItem()
   command! VimTodoListsCreateNewItemAbove silent call VimTodoListsCreateNewItemAbove()
   command! VimTodoListsCreateNewItemBelow silent call VimTodoListsCreateNewItemBelow()
   command! VimTodoListsCreateNewItem silent call VimTodoListsCreateNewItem()
   command! VimTodoListsGoToNextItem silent call VimTodoListsGoToNextItem()
   command! VimTodoListsGoToPreviousItem silent call VimTodoListsGoToPreviousItem()
+  command! VimTodoListsToggleItem silent call VimTodoListsToggleItem()
 endif
 
