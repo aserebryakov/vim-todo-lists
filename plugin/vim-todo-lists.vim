@@ -38,7 +38,7 @@ function! VimTodoListsSetNormalMode()
   nunmap <buffer> O
   nunmap <buffer> j
   nunmap <buffer> k
-  nnoremap <buffer> <Space> :silent call VimTodoListsToggleItem()<CR>
+  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
 endfunction
 
