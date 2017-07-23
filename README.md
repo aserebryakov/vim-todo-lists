@@ -27,7 +27,27 @@ Usage
 
 Plugin is automatically applied for files with `.todo` extension.
 
-##### Key bindings
+##### TODO Items
+
+The sequence matching the expression '^  [ ] ' marks a line as a TODO list item.
+
+###### Example
+
+```
+  [ ] Not done
+  [X] Done
+```
+
+##### Commands
+
+* `:VimTodoListsCreateNewItemAbove` - creates a new item in a line above cursor
+* `:VimTodoListsCreateNewItemBelow` - creates a new item in a line below cursor
+* `:VimTodoListsCreateNewItem`      - creates a new item in current line
+* `:VimTodoListsGoToNextItem`       - go to the next item
+* `:VimTodoListsGoToPreviousItem`   - go to the previous item
+* `:VimTodoListsToggleItem`         - toggles the item
+
+##### Default key mappings
 
 ###### Item editing mode
 
@@ -44,6 +64,23 @@ Plugin is automatically applied for files with `.todo` extension.
 * `j`, `k`, `o`, `O`, `<CR>` - no special behavior
 * `<Space>` - toggle current item
 * `<leader>e` - switch to item editing mode
+
+##### Custom key mappings
+
+The `g:VimTodoListsCustomKeyMapper` variable should contain a name of the function
+implementing custom mappings.
+
+###### Example
+
+```
+let g:VimTodoListsCustomKeyMapper = 'VimTodoListsCustomMappings'
+
+function! VimTodoListsCustomMappings()
+  nnoremap <buffer> s :VimTodoListsToggleItem<CR>
+  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
+  noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
+endfunction
+```
 
 Future features
 ---------------
@@ -78,6 +115,10 @@ Changelog
 #### 0.1.1
 
 * Fixes broken compatibility with the [filestyle](https://github.com/aserebryakov/filestyle) plugin
+
+#### 0.2.0
+
+* Adds an option to configure custom key mappings
 
 Credits
 -------
