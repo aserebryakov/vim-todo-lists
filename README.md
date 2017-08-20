@@ -118,10 +118,11 @@ Changelog
 
 #### 0.2.0
 
-* Adds an option to configure custom key mappings
+* Added an option to configure custom key mappings
 
 #### 0.3.0
 
+* Added items toggling in visual mode
 * Improves work with indentations of list items
 
 Credits

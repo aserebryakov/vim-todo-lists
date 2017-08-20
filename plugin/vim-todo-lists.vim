@@ -51,6 +51,7 @@ function! VimTodoListsSetNormalMode()
   nunmap <buffer> j
   nunmap <buffer> k
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
+  vnoremap <buffer> <Space> :'<,'>VimTodoListsToggleItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
 endfunction
 
@@ -62,8 +63,9 @@ function! VimTodoListsSetItemMode()
   nnoremap <buffer> j :VimTodoListsGoToNextItem<CR>
   nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
+  vnoremap <buffer> <Space> :'<,'>VimTodoListsToggleItem<CR>
   inoremap <buffer> <CR> <CR><ESC>:VimTodoListsCreateNewItem<CR>
+  noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
 endfunction
 
 
@@ -108,16 +110,17 @@ function! VimTodoListsGoToPreviousItem()
 endfunction
 
 
-" Toggles todo item in list
-function! VimTodoListsToggleItem()
-  let l:line = getline('.')
+" Toggles todo items in specified range
+function! VimTodoListsToggleItemsRange()
+  for lineno in range (a:firstline, a:lastline)
+    let l:line = getline(lineno)
 
-  if match(l:line, '^\s*\[ \].*') != -1
-    call setline('.', substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
-  elseif match(l:line, '^\s*\[X\] .*') != -1
-    call setline('.', substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
-  endif
-
+    if match(l:line, '^\s*\[ \].*') != -1
+      call setline(lineno, substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+    elseif match(l:line, '^\s*\[X\] .*') != -1
+      call setline(lineno, substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
+    endif
+  endfor
 endfunction
 
 
@@ -142,6 +145,6 @@ if !exists('g:vimtodolists_plugin')
   command! VimTodoListsCreateNewItem silent call VimTodoListsCreateNewItem()
   command! VimTodoListsGoToNextItem silent call VimTodoListsGoToNextItem()
   command! VimTodoListsGoToPreviousItem silent call VimTodoListsGoToPreviousItem()
-  command! VimTodoListsToggleItem silent call VimTodoListsToggleItem()
+  command! -range VimTodoListsToggleItem silent <line1>,<line2>call VimTodoListsToggleItemsRange()
 endif
 
