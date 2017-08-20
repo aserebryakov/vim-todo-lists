@@ -63,7 +63,7 @@ function! VimTodoListsSetItemMode()
   nnoremap <buffer> j :VimTodoListsGoToNextItem<CR>
   nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  vnoremap <buffer> <Space> :'<,'>VimTodoListsToggleItem<CR>
+  vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   inoremap <buffer> <CR> <CR><ESC>:VimTodoListsCreateNewItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
 endfunction
@@ -110,17 +110,16 @@ function! VimTodoListsGoToPreviousItem()
 endfunction
 
 
-" Toggles todo items in specified range
-function! VimTodoListsToggleItemsRange()
-  for lineno in range (a:firstline, a:lastline)
-    let l:line = getline(lineno)
+" Toggles todo list item
+function! VimTodoListsToggleItem()
+  let l:line = getline('.')
 
-    if match(l:line, '^\s*\[ \].*') != -1
-      call setline(lineno, substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
-    elseif match(l:line, '^\s*\[X\] .*') != -1
-      call setline(lineno, substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
-    endif
-  endfor
+  if match(l:line, '^\s*\[ \].*') != -1
+    call setline('.', substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+  elseif match(l:line, '^\s*\[X\] .*') != -1
+    call setline('.', substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
+  endif
+
 endfunction
 
 
@@ -145,6 +144,6 @@ if !exists('g:vimtodolists_plugin')
   command! VimTodoListsCreateNewItem silent call VimTodoListsCreateNewItem()
   command! VimTodoListsGoToNextItem silent call VimTodoListsGoToNextItem()
   command! VimTodoListsGoToPreviousItem silent call VimTodoListsGoToPreviousItem()
-  command! -range VimTodoListsToggleItem silent <line1>,<line2>call VimTodoListsToggleItemsRange()
+  command! -range VimTodoListsToggleItem silent <line1>,<line2>call VimTodoListsToggleItem()
 endif
 
