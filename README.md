@@ -45,7 +45,7 @@ The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list i
 * `:VimTodoListsCreateNewItem`      - creates a new item in current line
 * `:VimTodoListsGoToNextItem`       - go to the next item
 * `:VimTodoListsGoToPreviousItem`   - go to the previous item
-* `:VimTodoListsToggleItem`         - toggles the item
+* `:VimTodoListsToggleItem`         - toggles the current item (or selected items in visual mode)
 
 ##### Default key mappings
 
