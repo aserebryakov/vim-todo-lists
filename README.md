@@ -29,7 +29,7 @@ Plugin is automatically applied for files with `.todo` extension.
 
 ##### TODO Items
 
-The sequence matching the expression '^  [ ] ' marks a line as a TODO list item.
+The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list item.
 
 ###### Example
 
@@ -45,7 +45,7 @@ The sequence matching the expression '^  [ ] ' marks a line as a TODO list item.
 * `:VimTodoListsCreateNewItem`      - creates a new item in current line
 * `:VimTodoListsGoToNextItem`       - go to the next item
 * `:VimTodoListsGoToPreviousItem`   - go to the previous item
-* `:VimTodoListsToggleItem`         - toggles the item
+* `:VimTodoListsToggleItem`         - toggles the current item (or selected items in visual mode)
 
 ##### Default key mappings
 
@@ -118,7 +118,13 @@ Changelog
 
 #### 0.2.0
 
-* Adds an option to configure custom key mappings
+* Added an option to configure custom key mappings
+
+#### 0.3.0
+
+* Added items toggling in visual mode
+* Improves work with indentations of list items
+* Fixed the error when trying to navigate the buffer that doesn't contain items
 
 Credits
 -------

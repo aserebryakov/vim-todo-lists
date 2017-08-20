@@ -51,6 +51,7 @@ function! VimTodoListsSetNormalMode()
   nunmap <buffer> j
   nunmap <buffer> k
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
+  vnoremap <buffer> <Space> :'<,'>VimTodoListsToggleItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
 endfunction
 
@@ -62,8 +63,9 @@ function! VimTodoListsSetItemMode()
   nnoremap <buffer> j :VimTodoListsGoToNextItem<CR>
   nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
+  vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   inoremap <buffer> <CR> <CR><ESC>:VimTodoListsCreateNewItem<CR>
+  noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
 endfunction
 
 
@@ -91,8 +93,8 @@ endfunction
 " Moves te cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent exec '/^  \[.\]'
-  silent exec 'noh'
+  silent! exec '/^\s*\[.\]'
+  silent! exec 'noh'
   normal! f[
   normal! l
 endfunction
@@ -101,21 +103,21 @@ endfunction
 " Moves te cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent exec '?^  \[.\]'
-  silent exec 'noh'
+  silent! exec '?^\s*\[.\]'
+  silent! exec 'noh'
   normal! f[
   normal! l
 endfunction
 
 
-" Toggles todo item in list
+" Toggles todo list item
 function! VimTodoListsToggleItem()
   let l:line = getline('.')
 
-  if match(l:line, '^  \[ \] .*') != -1
-    call setline('.', substitute(l:line, '^  \[ \] ', '  [X] ', ''))
-  elseif match(l:line, '^  \[X\] .*') != -1
-    call setline('.', substitute(l:line, '^  \[X\] ', '  [ ] ', ''))
+  if match(l:line, '^\s*\[ \].*') != -1
+    call setline('.', substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+  elseif match(l:line, '^\s*\[X\] .*') != -1
+    call setline('.', substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
   endif
 
 endfunction
@@ -142,6 +144,6 @@ if !exists('g:vimtodolists_plugin')
   command! VimTodoListsCreateNewItem silent call VimTodoListsCreateNewItem()
   command! VimTodoListsGoToNextItem silent call VimTodoListsGoToNextItem()
   command! VimTodoListsGoToPreviousItem silent call VimTodoListsGoToPreviousItem()
-  command! VimTodoListsToggleItem silent call VimTodoListsToggleItem()
+  command! -range VimTodoListsToggleItem silent <line1>,<line2>call VimTodoListsToggleItem()
 endif
 
