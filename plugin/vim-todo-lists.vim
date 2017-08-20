@@ -93,8 +93,8 @@ endfunction
 " Moves te cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent exec '/^\s*\[.\]'
-  silent exec 'noh'
+  silent! exec '/^\s*\[.\]'
+  silent! exec 'noh'
   normal! f[
   normal! l
 endfunction
@@ -103,8 +103,8 @@ endfunction
 " Moves te cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent exec '?^\s*\[.\]'
-  silent exec 'noh'
+  silent! exec '?^\s*\[.\]'
+  silent! exec 'noh'
   normal! f[
   normal! l
 endfunction

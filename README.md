@@ -124,6 +124,7 @@ Changelog
 
 * Added items toggling in visual mode
 * Improves work with indentations of list items
+* Fixed the error when trying to navigate the buffer that doesn't contain items
 
 Credits
 -------
