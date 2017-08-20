@@ -152,6 +152,10 @@ SOFTWARE.
 
 * Adds an option to configure custom key mappings
 
+0.3.0
+
+* Improves work with indentations of list items
+
 ==============================================================================
 8. Credits                                                 *VimTodoListsCredits*
 

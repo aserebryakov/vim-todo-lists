@@ -29,7 +29,7 @@ Plugin is automatically applied for files with `.todo` extension.
 
 ##### TODO Items
 
-The sequence matching the expression '^  [ ] ' marks a line as a TODO list item.
+The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list item.
 
 ###### Example
 
@@ -119,6 +119,10 @@ Changelog
 #### 0.2.0
 
 * Adds an option to configure custom key mappings
+
+#### 0.3.0
+
+* Improves work with indentations of list items
 
 Credits
 -------

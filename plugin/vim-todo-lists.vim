@@ -91,7 +91,7 @@ endfunction
 " Moves te cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent exec '/^  \[.\]'
+  silent exec '/^\s*\[.\]'
   silent exec 'noh'
   normal! f[
   normal! l
@@ -101,7 +101,7 @@ endfunction
 " Moves te cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent exec '?^  \[.\]'
+  silent exec '?^\s*\[.\]'
   silent exec 'noh'
   normal! f[
   normal! l
@@ -112,10 +112,10 @@ endfunction
 function! VimTodoListsToggleItem()
   let l:line = getline('.')
 
-  if match(l:line, '^  \[ \] .*') != -1
-    call setline('.', substitute(l:line, '^  \[ \] ', '  [X] ', ''))
-  elseif match(l:line, '^  \[X\] .*') != -1
-    call setline('.', substitute(l:line, '^  \[X\] ', '  [ ] ', ''))
+  if match(l:line, '^\s*\[ \].*') != -1
+    call setline('.', substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+  elseif match(l:line, '^\s*\[X\] .*') != -1
+    call setline('.', substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
   endif
 
 endfunction
