@@ -123,6 +123,12 @@ function! VimTodoListsToggleItem()
 endfunction
 
 
+" Counts the number of leading spaces
+function! VimTodoListsCountLeadingSpaces(line)
+  return (strlen(a:line) - strlen(substitute(a:line, '^\s*', '', '')))
+endfunction
+
+
 "Plugin startup code
 if !exists('g:vimtodolists_plugin')
   let g:vimtodolists_plugin = 1
