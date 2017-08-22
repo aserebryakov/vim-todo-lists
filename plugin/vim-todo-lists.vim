@@ -114,12 +114,32 @@ endfunction
 function! VimTodoListsToggleItem()
   let l:line = getline('.')
 
-  if match(l:line, '^\s*\[ \].*') != -1
+  if VimTodoListsItemIsNotDone(l:line) == 1
     call setline('.', substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
-  elseif match(l:line, '^\s*\[X\] .*') != -1
+  elseif VimTodoListsItemIsDone(l:line) == 1
     call setline('.', substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
   endif
 
+endfunction
+
+
+" Checks that item is not done
+function! VimTodoListsItemIsNotDone(line)
+  if match(a:line, '^\s*\[ \].*') != -1
+    return 1
+  else
+    return 0
+  endif
+endfunction
+
+
+" Checks that item is done
+function! VimTodoListsItemIsDone(line)
+  if match(a:line, '^\s*\[X\].*') != -1
+    return 1
+  else
+    return 0
+  endif
 endfunction
 
 
