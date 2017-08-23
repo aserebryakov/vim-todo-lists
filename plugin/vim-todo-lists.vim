@@ -122,7 +122,7 @@ function! VimTodoListsFindLastChild(lineno)
 
   " If item is the last line in the buffer it has no children
   if a:lineno == line('$')
-    return
+    return l:last_child_lineno
   endif
 
   for current_line in range (a:lineno + 1, line('$'))
