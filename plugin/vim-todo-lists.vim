@@ -44,6 +44,147 @@ function! VimTodoListsInit()
 endfunction
 
 
+" Sets the item done
+function! VimTodoListsSetItemDone(lineno)
+  let l:line = getline(a:lineno)
+  call setline(a:lineno, substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+endfunction
+
+
+" Sets the item not done
+function! VimTodoListsSetItemNotDone(lineno)
+  let l:line = getline(a:lineno)
+  call setline(a:lineno, substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
+endfunction
+
+
+" Checks that line is a todo list item
+function! VimTodoListsLineIsItem(line)
+  if match(a:line, '^\s*\[[ X]\].*') != -1
+    return 1
+  else
+
+  return 0
+endfunction
+
+
+" Checks that item is not done
+function! VimTodoListsItemIsNotDone(line)
+  if match(a:line, '^\s*\[ \].*') != -1
+    return 1
+  else
+    return 0
+  endif
+
+  return 0
+endfunction
+
+
+" Checks that item is done
+function! VimTodoListsItemIsDone(line)
+  if match(a:line, '^\s*\[X\].*') != -1
+    return 1
+  else
+    return 0
+  endif
+
+  return 0
+endfunction
+
+
+" Counts the number of leading spaces
+function! VimTodoListsCountLeadingSpaces(line)
+  return (strlen(a:line) - strlen(substitute(a:line, '^\s*', '', '')))
+endfunction
+
+
+" Returns the line number of the parent
+function! VimTodoListsFindParent(lineno)
+  let l:indent = VimTodoListsCountLeadingSpaces(getline(a:lineno))
+  let l:parent_lineno = -1
+
+  for current_line in range (a:lineno, 1, -1)
+    if (VimTodoListsLineIsItem(getline(current_line)) &&
+      \ VimTodoListsCountLeadingSpaces(getline(current_line)) < l:indent)
+      let l:parent_lineno = current_line
+      break
+    endif
+  endfor
+
+  return l:parent_lineno
+endfunction
+
+
+" Returns the line number of the last child
+function! VimTodoListsFindLastChild(lineno)
+  let l:indent = VimTodoListsCountLeadingSpaces(getline(a:lineno))
+  let l:last_child_lineno = a:lineno
+
+  " If item is the last line in the buffer it has no children
+  if a:lineno == line('$')
+    return
+  endif
+
+  for current_line in range (a:lineno + 1, line('$'))
+    if (VimTodoListsLineIsItem(getline(current_line)) &&
+      \ VimTodoListsCountLeadingSpaces(getline(current_line)) > l:indent)
+      let l:last_child_lineno = current_line
+    else
+      break
+    endif
+  endfor
+
+  return l:last_child_lineno
+endfunction
+
+
+" Marks the parent done if all children are done
+function! VimTodoListsUpdateParent(lineno)
+  let l:parent_lineno = VimTodoListsFindParent(a:lineno)
+
+  " No parent item
+  if l:parent_lineno == -1
+    return
+  endif
+
+  let l:last_child_lineno = VimTodoListsFindLastChild(l:parent_lineno)
+
+  " There is no children
+  if l:last_child_lineno == l:parent_lineno
+    return
+  endif
+
+  for current_line in range(l:parent_lineno + 1, l:last_child_lineno)
+    if VimTodoListsItemIsNotDone(getline(current_line)) == 1
+      " Not all children are done
+      call VimTodoListsSetItemNotDone(l:parent_lineno)
+      call VimTodoListsUpdateParent(l:parent_lineno)
+      return
+    endif
+  endfor
+
+  call VimTodoListsSetItemDone(l:parent_lineno)
+  call VimTodoListsUpdateParent(l:parent_lineno)
+endfunction
+
+
+" Applies the function for each child
+function! VimTodoListsForEachChild(lineno, function)
+  let l:last_child_lineno = VimTodoListsFindLastChild(a:lineno)
+
+  " No children items
+  if l:last_child_lineno == a:lineno
+    call call(a:function, [a:lineno])
+    return
+  endif
+
+  for current_line in range(a:lineno, l:last_child_lineno)
+    call call(a:function, [current_line])
+  endfor
+
+endfunction
+
+
 " Sets mapping for normal navigation and editing mode
 function! VimTodoListsSetNormalMode()
   nunmap <buffer> o
@@ -115,37 +256,12 @@ function! VimTodoListsToggleItem()
   let l:line = getline('.')
 
   if VimTodoListsItemIsNotDone(l:line) == 1
-    call setline('.', substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+    call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemDone')
   elseif VimTodoListsItemIsDone(l:line) == 1
-    call setline('.', substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
+    call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemNotDone')
   endif
 
-endfunction
-
-
-" Checks that item is not done
-function! VimTodoListsItemIsNotDone(line)
-  if match(a:line, '^\s*\[ \].*') != -1
-    return 1
-  else
-    return 0
-  endif
-endfunction
-
-
-" Checks that item is done
-function! VimTodoListsItemIsDone(line)
-  if match(a:line, '^\s*\[X\].*') != -1
-    return 1
-  else
-    return 0
-  endif
-endfunction
-
-
-" Counts the number of leading spaces
-function! VimTodoListsCountLeadingSpaces(line)
-  return (strlen(a:line) - strlen(substitute(a:line, '^\s*', '', '')))
+  call VimTodoListsUpdateParent(line('.'))
 endfunction
 
 
