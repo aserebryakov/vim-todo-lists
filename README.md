@@ -38,6 +38,25 @@ The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list i
   [X] Done
 ```
 
+##### Items Hierarchy
+
+If one item has lesser indentation than the next one then the first one is meant
+to be **parent** and the second to be **child**.
+
+###### Example
+
+```
+  [ ] Parent
+    [ ] Child1
+    [ ] Child2
+```
+
+###### Rules:
+* Changig state of the parent item changes the state of all children items accorndantly
+* If all children items are marked done, parent will also be marked as done
+* If parent is marked as done and one of the children changes state to not done
+  parent will also be marked as not done
+
 ##### Commands
 
 * `:VimTodoListsCreateNewItemAbove` - creates a new item in a line above cursor
@@ -125,6 +144,11 @@ Changelog
 * Added items toggling in visual mode
 * Improves work with indentations of list items
 * Fixed the error when trying to navigate the buffer that doesn't contain items
+
+
+#### 0.4.0
+
+* Added items hierarchy support
 
 Credits
 -------
