@@ -52,7 +52,7 @@ to be **parent** and the second to be **child**.
 ```
 
 ###### Rules:
-* Changig state of the parent item changes the state of all children items accorndantly
+* Changing state of the parent item changes the state of all children items accorndantly
 * If all children items are marked done, parent will also be marked as done
 * If parent is marked as done and one of the children changes state to not done
   parent will also be marked as not done
