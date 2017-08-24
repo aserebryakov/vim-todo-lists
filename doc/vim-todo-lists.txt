@@ -62,6 +62,12 @@ Example
 Items Hierarchy
 ---------------
 
+If one item has lesser indentation than the next one then the first one is meant
+to be 'parent' and the second to be 'child'.
+
+Example
+-------
+
 [ ] Parent
   [ ] Child1
   [ ] Child2

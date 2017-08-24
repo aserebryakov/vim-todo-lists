@@ -38,7 +38,12 @@ The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list i
   [X] Done
 ```
 
-###### Items Hierarchy
+##### Items Hierarchy
+
+If one item has lesser indentation than the next one then the first one is meant
+to be **parent** and the second to be **child**.
+
+###### Example
 
 ```
   [ ] Parent
@@ -46,7 +51,7 @@ The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list i
     [ ] Child2
 ```
 
-Rules:
+###### Rules:
 * Changig state of the parent item changes the state of all children items accorndantly
 * If all children items are marked done, parent will also be marked as done
 * If parent is marked as done and one of the children changes state to not done
