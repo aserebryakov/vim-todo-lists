@@ -52,10 +52,20 @@ to be **parent** and the second to be **child**.
 ```
 
 ###### Rules:
-* Changing state of the parent item changes the state of all children items accorndantly
+* Changing state of the parent item changes the state of all children items accordantly
 * If all children items are marked done, parent will also be marked as done
 * If parent is marked as done and one of the children changes state to not done
   parent will also be marked as not done
+
+##### Items Highlighting
+
+Items are highlighted in accordance to the following scheme:
+
+```
+  [ ] ! Important item (Underlined)
+  [ ] Normal item (Normal)
+  [X] Done item (Comment)
+```
 
 ##### Commands
 
@@ -145,10 +155,13 @@ Changelog
 * Improves work with indentations of list items
 * Fixed the error when trying to navigate the buffer that doesn't contain items
 
-
 #### 0.4.0
 
 * Added items hierarchy support
+
+#### 0.5.0
+
+* Added items highlighting
 
 Credits
 -------

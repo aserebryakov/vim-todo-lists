@@ -78,6 +78,16 @@ Rules:
 * If parent is marked as done and one of the children changes state to not done
   parent will also be marked as not done
 
+
+Items Highlighting
+------------------
+
+Items are highlighted in accordance to the following scheme:
+
+[ ] ! Important item (Underlined)
+[ ] Normal item (Normal)
+[X] Done item (Comment)
+
 Commands
 --------
 	*:VimTodoListsCreateNewItemAbove* *:VimTodoListsCreateNewItemBelow*
@@ -181,6 +191,10 @@ SOFTWARE.
 0.4.0
 
 * Added items hierarchy support
+
+0.5.0
+
+* Added items highlighting
 
 ==============================================================================
 8. Credits                                                 *VimTodoListsCredits*
