@@ -236,7 +236,6 @@ function! VimTodoListsGoToNextItem()
   normal! $
   silent! exec '/^\s*\[.\]'
   silent! exec 'noh'
-  normal! f[
   normal! l
 endfunction
 
@@ -246,7 +245,6 @@ function! VimTodoListsGoToPreviousItem()
   normal! 0
   silent! exec '?^\s*\[.\]'
   silent! exec 'noh'
-  normal! f[
   normal! l
 endfunction
 
@@ -260,6 +258,9 @@ function! VimTodoListsToggleItem()
   elseif VimTodoListsItemIsDone(l:line) == 1
     call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemNotDone')
   endif
+
+  " Restore the cursor position
+  normal! f[l
 
   call VimTodoListsUpdateParent(line('.'))
 endfunction

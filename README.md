@@ -163,6 +163,10 @@ Changelog
 
 * Added items highlighting
 
+#### 0.5.1
+
+* Fixed the annoying noise when navigating over items in default mode
+
 Credits
 -------
 
