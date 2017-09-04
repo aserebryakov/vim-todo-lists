@@ -217,36 +217,34 @@ function! VimTodoListsCreateNewItemAbove()
 endfunction
 
 
-" Creates e new item below the current line
+" Creates a new item below the current line
 function! VimTodoListsCreateNewItemBelow()
   normal! o  [ ] 
   startinsert!
 endfunction
 
 
-" Creates e new item in the current line
+" Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
   normal! 0i  [ ] 
   startinsert!
 endfunction
 
 
-" Moves te cursor to the next item
+" Moves the cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
   silent! exec '/^\s*\[.\]'
   silent! exec 'noh'
-  normal! f[
   normal! l
 endfunction
 
 
-" Moves te cursor to the previous item
+" Moves the cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
   silent! exec '?^\s*\[.\]'
   silent! exec 'noh'
-  normal! f[
   normal! l
 endfunction
 
@@ -255,11 +253,18 @@ endfunction
 function! VimTodoListsToggleItem()
   let l:line = getline('.')
 
+  " Store current cursor position
+  let l:cursor_pos = getcurpos()
+
   if VimTodoListsItemIsNotDone(l:line) == 1
     call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemDone')
   elseif VimTodoListsItemIsDone(l:line) == 1
     call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemNotDone')
   endif
+
+  " Restore the current position
+  " Using the {curswant} value to set the proper column
+  call cursor(l:cursor_pos[1], l:cursor_pos[4])
 
   call VimTodoListsUpdateParent(line('.'))
 endfunction

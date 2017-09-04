@@ -1,4 +1,4 @@
-*vim-todo-lists.txt*    Version 0.4.0
+*vim-todo-lists.txt*    Version 0.5.1
 *vim-todo-lists*
 
 Plugin for TODO lists management.
@@ -195,6 +195,11 @@ SOFTWARE.
 0.5.0
 
 * Added items highlighting
+
+0.5.1
+
+* Fixed the annoying noise when navigating over items in default mode
+* Fixed the cursor position after the item is toggled
 
 ==============================================================================
 8. Credits                                                 *VimTodoListsCredits*
