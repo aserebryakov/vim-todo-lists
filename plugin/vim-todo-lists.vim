@@ -48,6 +48,12 @@ endfunction
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
   call setline(a:lineno, substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+
+  let l:move_position = VimTodoListsFindTargetPositionDown(a:lineno)
+  if l:move_position != -1
+    call VimTodoListsMoveSubtree(a:lineno, l:move_position)
+  endif
+
 endfunction
 
 
@@ -55,6 +61,12 @@ endfunction
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
   call setline(a:lineno, substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
+
+  let l:move_position = VimTodoListsFindTargetPositionUp(a:lineno)
+  if l:move_position != -1
+    call VimTodoListsMoveSubtree(a:lineno, l:move_position)
+  endif
+
 endfunction
 
 
@@ -92,6 +104,91 @@ function! VimTodoListsItemIsDone(line)
 endfunction
 
 
+" Returns the line number of the brother item in specified range
+function! VimTodoListsBrotherItemInRange(line, range)
+  let l:indent = VimTodoListsCountLeadingSpaces(getline(a:line))
+  let l:result = -1
+
+  for current_line in a:range
+    if VimTodoListsLineIsItem(getline(current_line)) == 0
+      break
+    endif
+
+    if (VimTodoListsCountLeadingSpaces(getline(current_line)) == l:indent)
+      let l:result = current_line
+      break
+    elseif (VimTodoListsCountLeadingSpaces(getline(current_line)) > l:indent)
+      continue
+    else
+      break
+    endif
+  endfor
+
+  return l:result
+endfunction
+
+
+" Finds the insert position above the item
+function! VimTodoListsFindTargetPositionUp(line)
+  let l:range = range(a:line, 1, -1)
+  let l:candidate_line = VimTodoListsBrotherItemInRange(a:line, l:range)
+  let l:target_line = -1
+
+  while l:candidate_line != -1
+    let l:target_line = l:candidate_line
+    let l:candidate_line = VimTodoListsBrotherItemInRange(
+      \ l:candidate_line, range(l:candidate_line - 1, 1, -1))
+
+    if VimTodoListsItemIsNotDone(getline(l:target_line)) == 1
+      break
+    endif
+  endwhile
+
+  return VimTodoListsFindLastChild(l:target_line)
+endfunction
+
+
+" Finds the insert position below the item
+function! VimTodoListsFindTargetPositionDown(line)
+  let l:range = range(a:line, line('$'))
+  let l:candidate_line = VimTodoListsBrotherItemInRange(a:line, l:range)
+  let l:target_line = -1
+
+  while l:candidate_line != -1
+    let l:target_line = l:candidate_line
+    let l:candidate_line = VimTodoListsBrotherItemInRange(
+      \ l:candidate_line, range(l:candidate_line + 1, line('$')))
+  endwhile
+
+  return VimTodoListsFindLastChild(l:target_line)
+endfunction
+
+
+" Moves the item subtree to the specified position
+function! VimTodoListsMoveSubtree(lineno, position)
+  let l:subtree_length = VimTodoListsFindLastChild(a:lineno) - a:lineno + 1
+  let l:cursor_pos = getcurpos()
+
+  " Copy subtree to the required position
+  execute 'normal! ' . l:subtree_length . 'Y'
+  call cursor(a:position, l:cursor_pos[4])
+  execute 'normal! p'
+
+  if a:lineno < a:position
+    " In case of moving item down cursor should be returned to exact position
+    " where it was before
+    call cursor(l:cursor_pos[1], l:cursor_pos[4])
+  else
+    " In case of moving item up the text became one longer by a subtree length
+    call cursor(l:cursor_pos[1] + l:subtree_length, l:cursor_pos[4])
+  endif
+
+  " Delete subtree in the initial position
+  execute 'normal! ' . l:subtree_length . 'dd'
+
+endfunction
+
+
 " Counts the number of leading spaces
 function! VimTodoListsCountLeadingSpaces(line)
   return (strlen(a:line) - strlen(substitute(a:line, '^\s*', '', '')))
@@ -103,7 +200,7 @@ function! VimTodoListsFindParent(lineno)
   let l:indent = VimTodoListsCountLeadingSpaces(getline(a:lineno))
   let l:parent_lineno = -1
 
-  for current_line in range (a:lineno, 1, -1)
+  for current_line in range(a:lineno, 1, -1)
     if (VimTodoListsLineIsItem(getline(current_line)) &&
       \ VimTodoListsCountLeadingSpaces(getline(current_line)) < l:indent)
       let l:parent_lineno = current_line
