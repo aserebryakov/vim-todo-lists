@@ -139,7 +139,9 @@ function! VimTodoListsFindTargetPositionUp(line)
     let l:candidate_line = VimTodoListsBrotherItemInRange(
       \ l:candidate_line, range(l:candidate_line - 1, 1, -1))
 
-    if VimTodoListsItemIsNotDone(getline(l:target_line)) == 1
+    if l:candidate_line != -1 &&
+      \ VimTodoListsItemIsNotDone(getline(l:candidate_line)) == 1
+      let l:target_line = l:candidate_line
       break
     endif
   endwhile
@@ -172,13 +174,14 @@ function! VimTodoListsMoveSubtree(lineno, position)
   " Copy subtree to the required position
   execute 'normal! ' . l:subtree_length . 'Y'
   call cursor(a:position, l:cursor_pos[4])
-  execute 'normal! p'
 
   if a:lineno < a:position
+    execute 'normal! p'
     " In case of moving item down cursor should be returned to exact position
     " where it was before
     call cursor(l:cursor_pos[1], l:cursor_pos[4])
   else
+    execute 'normal! P'
     " In case of moving item up the text became one longer by a subtree length
     call cursor(l:cursor_pos[1] + l:subtree_length, l:cursor_pos[4])
   endif
