@@ -181,7 +181,11 @@ function! VimTodoListsMoveSubtree(lineno, position)
     " where it was before
     call cursor(l:cursor_pos[1], l:cursor_pos[4])
   else
-    execute 'normal! P'
+    if VimTodoListsItemIsNotDone(getline(a:position))
+      execute 'normal! p'
+    else
+      execute 'normal! P'
+    endif
     " In case of moving item up the text became one longer by a subtree length
     call cursor(l:cursor_pos[1] + l:subtree_length, l:cursor_pos[4])
   endif
