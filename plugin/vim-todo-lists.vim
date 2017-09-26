@@ -170,6 +170,8 @@ endfunction
 function! VimTodoListsMoveSubtree(lineno, position)
   let l:subtree_length = VimTodoListsFindLastChild(a:lineno) - a:lineno + 1
   let l:cursor_pos = getcurpos()
+  call cursor(a:lineno, l:cursor_pos[4])
+  let l:cursor_pos = getcurpos()
 
   " Copy subtree to the required position
   execute 'normal! ' . l:subtree_length . 'Y'
@@ -282,9 +284,13 @@ function! VimTodoListsForEachChild(lineno, function)
     return
   endif
 
-  for current_line in range(a:lineno, l:last_child_lineno)
+  " Apply the function on children prior to the item.
+  " This order is required for proper work of the items moving on toggle
+  for current_line in range(a:lineno + 1, l:last_child_lineno)
     call call(a:function, [current_line])
   endfor
+
+  call call(a:function, [a:lineno])
 
 endfunction
 
