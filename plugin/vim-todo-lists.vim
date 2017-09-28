@@ -152,6 +152,12 @@ endfunction
 
 " Moves the item subtree to the specified position
 function! VimTodoListsMoveSubtree(lineno, position)
+  if exists('g:VimTodoListsMoveItems')
+    if g:VimTodoListsMoveItems != 1
+      return
+    endif
+  endif
+
   let l:subtree_length = VimTodoListsFindLastChild(a:lineno) - a:lineno + 1
 
   let l:cursor_pos = getcurpos()
