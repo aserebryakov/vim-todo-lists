@@ -379,11 +379,11 @@ function! VimTodoListsToggleItem()
     call VimTodoListsMoveSubtreeUp(l:lineno)
   endif
 
+  call VimTodoListsUpdateParent(l:lineno)
+
   " Restore the current position
   " Using the {curswant} value to set the proper column
   call cursor(l:cursor_pos[1], l:cursor_pos[4])
-
-  call VimTodoListsUpdateParent(l:lineno)
 endfunction
 
 
