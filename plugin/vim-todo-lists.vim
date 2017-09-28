@@ -153,9 +153,12 @@ endfunction
 " Moves the item subtree to the specified position
 function! VimTodoListsMoveSubtree(lineno, position)
   let l:subtree_length = VimTodoListsFindLastChild(a:lineno) - a:lineno + 1
+
   let l:cursor_pos = getcurpos()
   call cursor(a:lineno, l:cursor_pos[4])
-  let l:cursor_pos = getcurpos()
+
+  " Update cursor position
+  let l:cursor_pos[1] = a:lineno
 
   " Copy subtree to the required position
   execute 'normal! ' . l:subtree_length . 'Y'
@@ -363,23 +366,24 @@ endfunction
 " Toggles todo list item
 function! VimTodoListsToggleItem()
   let l:line = getline('.')
+  let l:lineno = line('.')
 
   " Store current cursor position
   let l:cursor_pos = getcurpos()
 
   if VimTodoListsItemIsNotDone(l:line) == 1
-    call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemDone')
-    call VimTodoListsMoveSubtreeDown(line('.'))
+    call VimTodoListsForEachChild(l:lineno, 'VimTodoListsSetItemDone')
+    call VimTodoListsMoveSubtreeDown(l:lineno)
   elseif VimTodoListsItemIsDone(l:line) == 1
-    call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemNotDone')
-    call VimTodoListsMoveSubtreeUp(line('.'))
+    call VimTodoListsForEachChild(l:lineno, 'VimTodoListsSetItemNotDone')
+    call VimTodoListsMoveSubtreeUp(l:lineno)
   endif
 
   " Restore the current position
   " Using the {curswant} value to set the proper column
   call cursor(l:cursor_pos[1], l:cursor_pos[4])
 
-  call VimTodoListsUpdateParent(line('.'))
+  call VimTodoListsUpdateParent(l:lineno)
 endfunction
 
 
