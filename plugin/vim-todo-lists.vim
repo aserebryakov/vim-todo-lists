@@ -48,12 +48,6 @@ endfunction
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
   call setline(a:lineno, substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
-
-  let l:move_position = VimTodoListsFindTargetPositionDown(a:lineno)
-  if l:move_position != -1
-    call VimTodoListsMoveSubtree(a:lineno, l:move_position)
-  endif
-
 endfunction
 
 
@@ -61,12 +55,6 @@ endfunction
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
   call setline(a:lineno, substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
-
-  let l:move_position = VimTodoListsFindTargetPositionUp(a:lineno)
-  if l:move_position != -1
-    call VimTodoListsMoveSubtree(a:lineno, l:move_position)
-  endif
-
 endfunction
 
 
@@ -74,7 +62,7 @@ endfunction
 function! VimTodoListsLineIsItem(line)
   if match(a:line, '^\s*\[[ X]\].*') != -1
     return 1
-  else
+  endif
 
   return 0
 endfunction
@@ -84,8 +72,6 @@ endfunction
 function! VimTodoListsItemIsNotDone(line)
   if match(a:line, '^\s*\[ \].*') != -1
     return 1
-  else
-    return 0
   endif
 
   return 0
@@ -96,8 +82,6 @@ endfunction
 function! VimTodoListsItemIsDone(line)
   if match(a:line, '^\s*\[X\].*') != -1
     return 1
-  else
-    return 0
   endif
 
   return 0
@@ -129,9 +113,9 @@ endfunction
 
 
 " Finds the insert position above the item
-function! VimTodoListsFindTargetPositionUp(line)
-  let l:range = range(a:line, 1, -1)
-  let l:candidate_line = VimTodoListsBrotherItemInRange(a:line, l:range)
+function! VimTodoListsFindTargetPositionUp(lineno)
+  let l:range = range(a:lineno, 1, -1)
+  let l:candidate_line = VimTodoListsBrotherItemInRange(a:lineno, l:range)
   let l:target_line = -1
 
   while l:candidate_line != -1
@@ -183,11 +167,15 @@ function! VimTodoListsMoveSubtree(lineno, position)
     " where it was before
     call cursor(l:cursor_pos[1], l:cursor_pos[4])
   else
-    if VimTodoListsItemIsNotDone(getline(a:position))
-      execute 'normal! p'
-    else
+    let l:indent = VimTodoListsCountLeadingSpaces(getline(a:lineno))
+
+    if VimTodoListsItemIsDone(getline(a:position)) &&
+       \ (VimTodoListsCountLeadingSpaces(getline(a:position)) == l:indent)
       execute 'normal! P'
+    else
+      execute 'normal! p'
     endif
+
     " In case of moving item up the text became one longer by a subtree length
     call cursor(l:cursor_pos[1] + l:subtree_length, l:cursor_pos[4])
   endif
@@ -195,6 +183,26 @@ function! VimTodoListsMoveSubtree(lineno, position)
   " Delete subtree in the initial position
   execute 'normal! ' . l:subtree_length . 'dd'
 
+endfunction
+
+
+" Moves the subtree up
+function! VimTodoListsMoveSubtreeUp(lineno)
+  let l:move_position = VimTodoListsFindTargetPositionUp(a:lineno)
+
+  if l:move_position != -1
+    call VimTodoListsMoveSubtree(a:lineno, l:move_position)
+  endif
+endfunction
+
+
+" Moves the subtree down
+function! VimTodoListsMoveSubtreeDown(lineno)
+  let l:move_position = VimTodoListsFindTargetPositionDown(a:lineno)
+
+  if l:move_position != -1
+    call VimTodoListsMoveSubtree(a:lineno, l:move_position)
+  endif
 endfunction
 
 
@@ -264,12 +272,14 @@ function! VimTodoListsUpdateParent(lineno)
     if VimTodoListsItemIsNotDone(getline(current_line)) == 1
       " Not all children are done
       call VimTodoListsSetItemNotDone(l:parent_lineno)
+      call VimTodoListsMoveSubtreeUp(l:parent_lineno)
       call VimTodoListsUpdateParent(l:parent_lineno)
       return
     endif
   endfor
 
   call VimTodoListsSetItemDone(l:parent_lineno)
+  call VimTodoListsMoveSubtreeDown(l:parent_lineno)
   call VimTodoListsUpdateParent(l:parent_lineno)
 endfunction
 
@@ -278,20 +288,11 @@ endfunction
 function! VimTodoListsForEachChild(lineno, function)
   let l:last_child_lineno = VimTodoListsFindLastChild(a:lineno)
 
-  " No children items
-  if l:last_child_lineno == a:lineno
-    call call(a:function, [a:lineno])
-    return
-  endif
-
   " Apply the function on children prior to the item.
   " This order is required for proper work of the items moving on toggle
-  for current_line in range(a:lineno + 1, l:last_child_lineno)
+  for current_line in range(a:lineno, l:last_child_lineno)
     call call(a:function, [current_line])
   endfor
-
-  call call(a:function, [a:lineno])
-
 endfunction
 
 
@@ -368,8 +369,10 @@ function! VimTodoListsToggleItem()
 
   if VimTodoListsItemIsNotDone(l:line) == 1
     call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemDone')
+    call VimTodoListsMoveSubtreeDown(line('.'))
   elseif VimTodoListsItemIsDone(l:line) == 1
     call VimTodoListsForEachChild(line('.'), 'VimTodoListsSetItemNotDone')
+    call VimTodoListsMoveSubtreeUp(line('.'))
   endif
 
   " Restore the current position
