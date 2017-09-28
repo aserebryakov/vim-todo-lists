@@ -10,8 +10,7 @@ Installation
 
 ##### Pathogen
 
-    $ cd ~/.vim/bundle
-    $ git clone https://github.com/aserebryakov/vim-todo-lists.git
+    $ cd ~/.vim/bundle $ git clone https://github.com/aserebryakov/vim-todo-lists.git
 
 ##### NeoBundle
 
@@ -52,6 +51,7 @@ to be **parent** and the second to be **child**.
 ```
 
 ###### Rules:
+
 * Changing state of the parent item changes the state of all children items accordantly
 * If all children items are marked done, parent will also be marked as done
 * If parent is marked as done and one of the children changes state to not done
@@ -65,6 +65,69 @@ Items are highlighted in accordance to the following scheme:
   [ ] ! Important item (Underlined)
   [ ] Normal item (Normal)
   [X] Done item (Comment)
+```
+
+##### Items moving on state change
+
+By default item when its status is changed is moved in the list in accordance
+to the following rules
+
+###### Mark item done
+
+Item marked as done is moved to the end of all done items list.
+If done list doesn't exist, item is placed just after the last not done item.
+
+*Before*
+
+```
+[ ] Not Done 1
+[ ] Will be done now
+[ ] Not Done 2
+[X] Done
+```
+
+*After*
+
+```
+[ ] Not Done 1
+[ ] Not Done 2
+[X] Done
+[X] Will be done now
+```
+
+###### Mark item undone
+
+Undone item is moved to the end of all not done items list.
+If all items are marked done, the items is moved before the first done item.
+
+*Before*
+
+```
+[ ] Not Done 1
+[ ] Not Done 2
+[X] Done
+[X] Will be undone now
+```
+*After*
+
+```
+[ ] Not Done 1
+[ ] Not Done 2
+[ ] Will be done now
+[X] Done
+```
+
+###### Interaction with items hierarchy
+
+This feature also affect the items in hierarchy in accordance to the rules above.
+
+###### Disable the items moving
+
+If you don't want items to be moved after state change, you may add the following
+line into your `.vimrc` file:
+
+```
+let g:VimTodoListsMoveItems = 0
 ```
 
 ##### Commands
@@ -167,6 +230,10 @@ Changelog
 
 * Fixed the annoying noise when navigating over items in default mode
 * Fixed the cursor position after the item is toggled
+
+#### 0.6.0
+
+* Added items moving on state change
 
 Credits
 -------
