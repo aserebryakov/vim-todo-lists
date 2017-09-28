@@ -10,8 +10,7 @@ Installation
 
 ##### Pathogen
 
-    $ cd ~/.vim/bundle
-    $ git clone https://github.com/aserebryakov/vim-todo-lists.git
+    $ cd ~/.vim/bundle $ git clone https://github.com/aserebryakov/vim-todo-lists.git
 
 ##### NeoBundle
 
@@ -52,6 +51,7 @@ to be **parent** and the second to be **child**.
 ```
 
 ###### Rules:
+
 * Changing state of the parent item changes the state of all children items accordantly
 * If all children items are marked done, parent will also be marked as done
 * If parent is marked as done and one of the children changes state to not done
@@ -119,7 +119,7 @@ If all items are marked done, the items is moved before the first done item.
 
 ###### Interaction with items hierarchy
 
-This feature also affect the items in hierarchy in accordance to the rules above
+This feature also affect the items in hierarchy in accordance to the rules above.
 
 ###### Disable the items moving
 
@@ -230,6 +230,10 @@ Changelog
 
 * Fixed the annoying noise when navigating over items in default mode
 * Fixed the cursor position after the item is toggled
+
+#### 0.6.0
+
+* Added items moving on state change
 
 Credits
 -------
