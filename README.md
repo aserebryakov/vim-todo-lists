@@ -67,6 +67,69 @@ Items are highlighted in accordance to the following scheme:
   [X] Done item (Comment)
 ```
 
+##### Items moving on state change
+
+By default item when its status is changed is moved in the list in accordance
+to the following rules
+
+###### Mark item done
+
+Item marked as done is moved to the end of all done items list.
+If done list doesn't exist, item is placed just after the last not done item.
+
+**Before**
+
+```
+[ ] Not Done 1
+[ ] Will be done now
+[ ] Not Done 2
+[X] Done
+```
+
+**After**
+
+```
+[ ] Not Done 1
+[ ] Not Done 2
+[X] Done
+[X] Will be done now
+```
+
+###### Mark item undone
+
+Undone item is moved to the end of all not done items list.
+If all items are marked done, the items is moved before the first done item.
+**Before**
+
+```
+[ ] Not Done 1
+[ ] Not Done 2
+[X] Done
+[X] Will be undone now
+```
+
+**After**
+
+```
+[ ] Not Done 1
+[ ] Not Done 2
+[ ] Will be done now
+[X] Done
+```
+
+###### Interaction with items hierarchy
+
+This feature also affect the items in hierarchy in accordance to the rules above
+
+###### Disable the items moving
+
+If you don't want items to be moved after state change, you may add the following
+line into your `.vimrc` file:
+
+```
+let g:VimTodoListsMoveItems = 0
+```
+
 ##### Commands
 
 * `:VimTodoListsCreateNewItemAbove` - creates a new item in a line above cursor
