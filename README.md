@@ -77,7 +77,7 @@ to the following rules
 Item marked as done is moved to the end of all done items list.
 If done list doesn't exist, item is placed just after the last not done item.
 
-**Before**
+*Before*
 
 ```
 [ ] Not Done 1
@@ -86,7 +86,7 @@ If done list doesn't exist, item is placed just after the last not done item.
 [X] Done
 ```
 
-**After**
+*After*
 
 ```
 [ ] Not Done 1
@@ -99,7 +99,8 @@ If done list doesn't exist, item is placed just after the last not done item.
 
 Undone item is moved to the end of all not done items list.
 If all items are marked done, the items is moved before the first done item.
-**Before**
+
+*Before*
 
 ```
 [ ] Not Done 1
@@ -107,8 +108,7 @@ If all items are marked done, the items is moved before the first done item.
 [X] Done
 [X] Will be undone now
 ```
-
-**After**
+*After*
 
 ```
 [ ] Not Done 1
