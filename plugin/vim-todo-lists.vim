@@ -346,7 +346,7 @@ endfunction
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i[ ] 
+  normal! 0i  [ ] 
   startinsert!
 endfunction
 
