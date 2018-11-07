@@ -332,21 +332,21 @@ endfunction
 
 " Creates a new item above the current line
 function! VimTodoListsCreateNewItemAbove()
-  normal! O  [ ] 
+  normal! O[ ] 
   startinsert!
 endfunction
 
 
 " Creates a new item below the current line
 function! VimTodoListsCreateNewItemBelow()
-  normal! o  [ ] 
+  normal! o[ ] 
   startinsert!
 endfunction
 
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i  [ ] 
+  normal! 0i[ ] 
   startinsert!
 endfunction
 
