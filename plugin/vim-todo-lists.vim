@@ -27,8 +27,8 @@ function! VimTodoListsInit()
   if !exists('g:VimTodoListsDatesEnabled')
     let g:VimTodoListsDatesEnabled = 0
   endif
-  if !exists('g:VimTodoListDatesFormat')
-    let g:VimTodoListDatesFormat = "%a %b, %Y"
+  if !exists('g:VimTodoListsDatesFormat')
+    let g:VimTodoListsDatesFormat = "%a %b, %Y"
   endif
   setlocal tabstop=2
   setlocal shiftwidth=2 expandtab
@@ -341,7 +341,7 @@ function! VimTodoListsCreateNewItemAbove()
   normal! O[ ] 
   if(g:VimTodoListsDatesEnabled == 1)
     normal! ma
-    execute "normal! i\<space>(\<C-r>=strftime('" . g:VimTodoListDatesFormat ."')\<CR>)"
+    execute "normal! i\<space>(\<C-r>=strftime('" . g:VimTodoListsDatesFormat ."')\<CR>)"
     normal! `a
   endif
   startinsert
@@ -353,7 +353,7 @@ function! VimTodoListsCreateNewItemBelow()
   normal! o[ ] 
  if(g:VimTodoListsDatesEnabled == 1)
     normal! ma
-    execute "normal! i\<space>(\<c-r>=strftime('" . g:VimTodoListDatesFormat ."')\<cr>)"
+    execute "normal! i\<space>(\<c-r>=strftime('" . g:VimTodoListsDatesFormat ."')\<cr>)"
     normal! `a
   endif
   startinsert
@@ -364,7 +364,7 @@ function! VimTodoListsCreateNewItem()
   normal! 0i [ ] 
   if(g:VimTodoListsDatesEnabled == 1)
     normal! ma
-    execute "normal! i\<space>(\<C-r>=strftime('" . g:VimTodoListDatesFormat ."')\<CR>)"
+    execute "normal! i\<space>(\<C-r>=strftime('" . g:VimTodoListsDatesFormat ."')\<CR>)"
     normal! `a
   endif
   startinsert
