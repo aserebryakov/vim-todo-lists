@@ -24,6 +24,12 @@
 " Initializes plugin settings and mappings
 function! VimTodoListsInit()
   set filetype=todo
+  if !exists('g:VimTodoListsDatesEnabled')
+    let g:VimTodoListsDatesEnabled = 0
+  endif
+  if !exists('g:VimTodoListDatesFormat')
+    let g:VimTodoListDatesFormat = "%a %b, %Y"
+  endif
   setlocal tabstop=2
   setlocal shiftwidth=2 expandtab
   setlocal cursorline
@@ -333,21 +339,35 @@ endfunction
 " Creates a new item above the current line
 function! VimTodoListsCreateNewItemAbove()
   normal! O[ ] 
-  startinsert!
+  if(g:VimTodoListsDatesEnabled == 1)
+    normal! ma
+    execute "normal! i\<space>(\<C-r>=strftime('" . g:VimTodoListDatesFormat ."')\<CR>)"
+    normal! `a
+  endif
+  startinsert
 endfunction
 
 
 " Creates a new item below the current line
 function! VimTodoListsCreateNewItemBelow()
   normal! o[ ] 
-  startinsert!
+ if(g:VimTodoListsDatesEnabled == 1)
+    normal! ma
+    execute "normal! i\<space>(\<c-r>=strftime('" . g:VimTodoListDatesFormat ."')\<cr>)"
+    normal! `a
+  endif
+  startinsert
 endfunction
-
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i  [ ] 
-  startinsert!
+  normal! 0i [ ] 
+  if(g:VimTodoListsDatesEnabled == 1)
+    normal! ma
+    execute "normal! i\<space>(\<C-r>=strftime('" . g:VimTodoListDatesFormat ."')\<CR>)"
+    normal! `a
+  endif
+  startinsert
 endfunction
 
 
