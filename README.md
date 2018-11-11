@@ -174,9 +174,9 @@ function! VimTodoListsCustomMappings()
 endfunction
 ```
 
-Automatic dating
-----------------
-You can enable automatic dating of items by setting the following in your
+Automatic date insertion
+------------------------
+You can enable automatic date insertion by setting the following in your
 .vimrc:
 
 ```
