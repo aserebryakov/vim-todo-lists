@@ -28,13 +28,13 @@ Plugin is automatically applied for files with `.todo` extension.
 
 ##### TODO Items
 
-The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list item.
+The sequence matching the expression `^\s\*- [ ].\*` marks a line as a TODO list item.
 
 ###### Example
 
 ```
-  [ ] Not done
-  [X] Done
+- [ ] Not done
+- [X] Done
 ```
 
 ##### Items Hierarchy
@@ -45,9 +45,9 @@ to be **parent** and the second to be **child**.
 ###### Example
 
 ```
-  [ ] Parent
-    [ ] Child1
-    [ ] Child2
+- [ ] Parent
+  - [ ] Child1
+  - [ ] Child2
 ```
 
 ###### Rules:
@@ -62,9 +62,9 @@ to be **parent** and the second to be **child**.
 Items are highlighted in accordance to the following scheme:
 
 ```
-  [ ] ! Important item (Underlined)
-  [ ] Normal item (Normal)
-  [X] Done item (Comment)
+- [ ] ! Important item (Underlined)
+- [ ] Normal item (Normal)
+- [X] Done item (Comment)
 ```
 
 ##### Items moving on state change
@@ -80,19 +80,19 @@ If done list doesn't exist, item is placed just after the last not done item.
 *Before*
 
 ```
-[ ] Not Done 1
-[ ] Will be done now
-[ ] Not Done 2
-[X] Done
+- [ ] Not Done 1
+- [ ] Will be done now
+- [ ] Not Done 2
+- [X] Done
 ```
 
 *After*
 
 ```
-[ ] Not Done 1
-[ ] Not Done 2
-[X] Done
-[X] Will be done now
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [X] Done
+- [X] Will be done now
 ```
 
 ###### Mark item undone
@@ -103,18 +103,18 @@ If all items are marked done, the items is moved before the first done item.
 *Before*
 
 ```
-[ ] Not Done 1
-[ ] Not Done 2
-[X] Done
-[X] Will be undone now
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [X] Done
+- [X] Will be undone now
 ```
 *After*
 
 ```
-[ ] Not Done 1
-[ ] Not Done 2
-[ ] Will be done now
-[X] Done
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [ ] Will be done now
+- [X] Done
 ```
 
 ###### Interaction with items hierarchy
@@ -234,6 +234,10 @@ Changelog
 #### 0.6.0
 
 * Added items moving on state change
+
+#### 0.7.0
+
+* Makes items list markdown compatible
 
 Credits
 -------

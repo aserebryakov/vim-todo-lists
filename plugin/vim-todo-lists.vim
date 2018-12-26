@@ -1,6 +1,6 @@
 " MIT License
 "
-" Copyright (c) 2017 Alexander Serebryakov (alex.serebr@gmail.com)
+" Copyright (c) 2018 Alexander Serebryakov (alex.serebr@gmail.com)
 "
 " Permission is hereby granted, free of charge, to any person obtaining a copy
 " of this software and associated documentation files (the "Software"), to
@@ -47,20 +47,20 @@ endfunction
 " Sets the item done
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[ \]', '\1[X]', ''))
 endfunction
 
 
 " Sets the item not done
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[X\]', '\1[ ]', ''))
 endfunction
 
 
 " Checks that line is a todo list item
 function! VimTodoListsLineIsItem(line)
-  if match(a:line, '^\s*\[[ X]\].*') != -1
+  if match(a:line, '^\s*- \[[ X]\].*') != -1
     return 1
   endif
 
@@ -70,7 +70,7 @@ endfunction
 
 " Checks that item is not done
 function! VimTodoListsItemIsNotDone(line)
-  if match(a:line, '^\s*\[ \].*') != -1
+  if match(a:line, '^\s*- \[ \].*') != -1
     return 1
   endif
 
@@ -80,7 +80,7 @@ endfunction
 
 " Checks that item is done
 function! VimTodoListsItemIsDone(line)
-  if match(a:line, '^\s*\[X\].*') != -1
+  if match(a:line, '^\s*- \[X\].*') != -1
     return 1
   endif
 
@@ -332,21 +332,21 @@ endfunction
 
 " Creates a new item above the current line
 function! VimTodoListsCreateNewItemAbove()
-  normal! O  [ ] 
+  normal! O- [ ] 
   startinsert!
 endfunction
 
 
 " Creates a new item below the current line
 function! VimTodoListsCreateNewItemBelow()
-  normal! o  [ ] 
+  normal! o- [ ] 
   startinsert!
 endfunction
 
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i  [ ] 
+  normal! 0i- [ ] 
   startinsert!
 endfunction
 
@@ -354,7 +354,7 @@ endfunction
 " Moves the cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent! exec '/^\s*\[.\]'
+  silent! exec '/^\s*- \[.\]'
   silent! exec 'noh'
   normal! l
 endfunction
@@ -363,7 +363,7 @@ endfunction
 " Moves the cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent! exec '?^\s*\[.\]'
+  silent! exec '?^\s*- \[.\]'
   silent! exec 'noh'
   normal! l
 endfunction

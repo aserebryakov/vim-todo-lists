@@ -50,14 +50,13 @@ Plugin is automatically applied for files with `.todo` extension.
 TODO Items
 ----------
 
-The sequence matching the expression '^  [ ] ' marks a line as a TODO list
-item.
+The sequence matching the expression `^\s\*- [ ].\*` marks a line as a TODO list item.
 
 Example
 -------
 
-[ ] Not done
-[X] Done
+- [ ] Not done
+- [X] Done
 
 Items Hierarchy
 ---------------
@@ -68,9 +67,9 @@ to be 'parent' and the second to be 'child'.
 Example
 -------
 
-[ ] Parent
-  [ ] Child1
-  [ ] Child2
+- [ ] Parent
+  - [ ] Child1
+  - [ ] Child2
 
 Rules:
 * Changing state of the parent item changes the state of all children items accorndantly
@@ -84,9 +83,9 @@ Items Highlighting
 
 Items are highlighted in accordance to the following scheme:
 
-[ ] ! Important item (Underlined)
-[ ] Normal item (Normal)
-[X] Done item (Comment)
+- [ ] ! Important item (Underlined)
+- [ ] Normal item (Normal)
+- [X] Done item (Comment)
 
 
 
@@ -105,18 +104,18 @@ If done list doesn't exist, item is placed just after the last not done item.
 Before
 ------
 
-[ ] Not Done 1
-[ ] Will be done now
-[ ] Not Done 2
-[X] Done
+- [ ] Not Done 1
+- [ ] Will be done now
+- [ ] Not Done 2
+- [X] Done
 
 After
 -----
 
-[ ] Not Done 1
-[ ] Not Done 2
-[X] Done
-[X] Will be done now
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [X] Done
+- [X] Will be done now
 
 Mark item undone
 ----------------
@@ -127,18 +126,18 @@ If all items are marked done, the items is moved before the first done item.
 Before
 ------
 
-[ ] Not Done 1
-[ ] Not Done 2
-[X] Done
-[X] Will be undone now
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [X] Done
+- [X] Will be undone now
 
 After
 -----
 
-[ ] Not Done 1
-[ ] Not Done 2
-[ ] Will be done now
-[X] Done
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [ ] Will be done now
+- [X] Done
 
 Interaction with items hierarchy
 --------------------------------
@@ -211,7 +210,7 @@ https://github.com/aserebryakov/vim-todo-lists
 
 MIT License
 
-Copyright (c) 2017 Alexander Serebryakov (alex.serebr@gmail.com)
+Copyright (c) 2018 Alexander Serebryakov (alex.serebr@gmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -270,6 +269,10 @@ SOFTWARE.
 0.6.0
 
 * Added items moving on state change
+
+0.7.0
+
+* Makes items list markdown compatible
 
 ==============================================================================
 8. Credits                                                 *VimTodoListsCredits*
