@@ -158,6 +158,7 @@ Commands
 	*:VimTodoListsCreateNewItemAbove* *:VimTodoListsCreateNewItemBelow*
 		*:VimTodoListsCreateNewItem* *:VimTodoListsGoToNextItem*
 		*:VimTodoListsGoToPreviousItem* *:VimTodoListsToggleItem*
+		*:VimTodoListsIncreaseIndent* *:VimTodoListsDecreaseIndent*
 
 * :VimTodoListsCreateNewItemAbove - creates a new item in a line above cursor
 * :VimTodoListsCreateNewItemBelow - creates a new item in a line below cursor
@@ -166,6 +167,8 @@ Commands
 * :VimTodoListsGoToPreviousItem   - go to the previous item
 * :VimTodoListsToggleItem         - toggles the current item (or selected items
                                     in visual mode)
+* :VimTodoListsIncreaseIndent     - increases the indent of current line
+* :VimTodoListsDecreaseIndent     - decreases the indent of current line
 
 
 Default key bindings
@@ -179,6 +182,8 @@ Item editing mode
 * o - create new item above the cursor
 * O - create new item below the cursor
 * <Space> - toggle current item
+* <Tab> - increases the indent of current (or selected) line(s)
+* <Shift-Tab> - decreases the indent of current (or selected) line(s)
 * <CR> - create new item in insert mode
 * <leader>e - switch to normal editing mode
 
@@ -273,6 +278,7 @@ SOFTWARE.
 0.7.0
 
 * Makes items list markdown compatible
+* Adds mappings for fast increasing/decreasing indent
 
 ==============================================================================
 8. Credits                                                 *VimTodoListsCredits*
