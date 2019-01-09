@@ -24,6 +24,15 @@
 " Initializes plugin settings and mappings
 function! VimTodoListsInit()
   set filetype=todo
+
+  if !exists('g:VimTodoListsDatesEnabled')
+    let g:VimTodoListsDatesEnabled = 0
+  endif
+
+  if !exists('g:VimTodoListsDatesFormat')
+    let g:VimTodoListsDatesFormat = "%X, %d %b %Y"
+  endif
+
   setlocal tabstop=2
   setlocal shiftwidth=2 expandtab
   setlocal cursorline
@@ -325,7 +334,7 @@ function! VimTodoListsSetItemMode()
   nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  inoremap <buffer> <CR> <CR><ESC>:VimTodoListsCreateNewItem<CR>
+  inoremap <buffer> <CR> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
   nnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
   nnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
@@ -335,6 +344,12 @@ function! VimTodoListsSetItemMode()
   inoremap <buffer> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
 endfunction
 
+function! VimTodoListsAppendDate()
+  if(g:VimTodoListsDatesEnabled == 1)
+    let l:date = strftime(g:VimTodoListsDatesFormat)
+    execute "s/$/ (" . l:date . ")"
+  endif
+endfunction
 
 " Creates a new item above the current line
 function! VimTodoListsCreateNewItemAbove()
@@ -348,7 +363,6 @@ function! VimTodoListsCreateNewItemBelow()
   normal! o- [ ] 
   startinsert!
 endfunction
-
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()

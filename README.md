@@ -178,6 +178,22 @@ function! VimTodoListsCustomMappings()
 endfunction
 ```
 
+Automatic date insertion
+------------------------
+You can enable automatic date insertion by setting the following in your
+.vimrc:
+
+```
+let g:VimTodoListsDatesEnabled = 1
+```
+
+You can change the format of the date by setting the format variable to a valid
+strftime string like so:
+
+```
+let g:VimTodoListsDatesFormat = "%a %b, %Y"
+```
+
 Future features
 ---------------
 
