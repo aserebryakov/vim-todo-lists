@@ -1,6 +1,6 @@
 " MIT License
 "
-" Copyright (c) 2018 Alexander Serebryakov (alex.serebr@gmail.com)
+" Copyright (c) 2019 Alexander Serebryakov (alex.serebr@gmail.com)
 "
 " Permission is hereby granted, free of charge, to any person obtaining a copy
 " of this software and associated documentation files (the "Software"), to
@@ -327,6 +327,12 @@ function! VimTodoListsSetItemMode()
   vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   inoremap <buffer> <CR> <CR><ESC>:VimTodoListsCreateNewItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
+  nnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
+  nnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  vnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
+  vnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  inoremap <buffer> <Tab> <ESC>:VimTodoListsIncreaseIndent<CR>A
+  inoremap <buffer> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
 endfunction
 
 
@@ -392,6 +398,15 @@ function! VimTodoListsToggleItem()
   call cursor(l:cursor_pos[1], l:cursor_pos[4])
 endfunction
 
+" Increases the indent level
+function! VimTodoListsIncreaseIndent()
+  normal! >>
+endfunction
+
+" Decreases the indent level
+function! VimTodoListsDecreaseIndent()
+  normal! <<
+endfunction
 
 "Plugin startup code
 if !exists('g:vimtodolists_plugin')
@@ -415,5 +430,7 @@ if !exists('g:vimtodolists_plugin')
   command! VimTodoListsGoToNextItem silent call VimTodoListsGoToNextItem()
   command! VimTodoListsGoToPreviousItem silent call VimTodoListsGoToPreviousItem()
   command! -range VimTodoListsToggleItem silent <line1>,<line2>call VimTodoListsToggleItem()
+  command! -range VimTodoListsIncreaseIndent silent <line1>,<line2>call VimTodoListsIncreaseIndent()
+  command! -range VimTodoListsDecreaseIndent silent <line1>,<line2>call VimTodoListsDecreaseIndent()
 endif
 
