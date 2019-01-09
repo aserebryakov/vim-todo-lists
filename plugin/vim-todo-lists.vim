@@ -344,6 +344,7 @@ function! VimTodoListsSetItemMode()
   inoremap <buffer> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
 endfunction
 
+" Appends date at the end of the line
 function! VimTodoListsAppendDate()
   if(g:VimTodoListsDatesEnabled == 1)
     let l:date = strftime(g:VimTodoListsDatesFormat)

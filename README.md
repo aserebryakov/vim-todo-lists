@@ -178,17 +178,16 @@ function! VimTodoListsCustomMappings()
 endfunction
 ```
 
-Automatic date insertion
-------------------------
-You can enable automatic date insertion by setting the following in your
-.vimrc:
+##### Automatic date insertion
+
+Automatic date insertion may be enabled by setting the following in `.vimrc`:
 
 ```
 let g:VimTodoListsDatesEnabled = 1
 ```
 
-You can change the format of the date by setting the format variable to a valid
-strftime string like so:
+Date format may be changed by setting the format variable to a valid
+`strftime()` string:
 
 ```
 let g:VimTodoListsDatesFormat = "%a %b, %Y"
@@ -257,10 +256,12 @@ Changelog
 
 #### 0.7.0
 
-* Makes items list markdown compatible
-* Adds mappings for fast increasing/decreasing indent
+* Added automatic date insertion feature
+* Items list are made markdown compatible
+* Added mappings for fast increasing/decreasing indent
 
 Credits
 -------
 
 * Alexander Serebryakov, author ([GitHub](https://github.com/aserebryakov))
+* Jake Mason, automatic date insertion ([GitHub](https://github.com/jakemason))
