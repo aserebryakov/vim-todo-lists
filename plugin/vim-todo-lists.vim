@@ -1,6 +1,6 @@
 " MIT License
 "
-" Copyright (c) 2017 Alexander Serebryakov (alex.serebr@gmail.com)
+" Copyright (c) 2019 Alexander Serebryakov (alex.serebr@gmail.com)
 "
 " Permission is hereby granted, free of charge, to any person obtaining a copy
 " of this software and associated documentation files (the "Software"), to
@@ -24,6 +24,15 @@
 " Initializes plugin settings and mappings
 function! VimTodoListsInit()
   set filetype=todo
+
+  if !exists('g:VimTodoListsDatesEnabled')
+    let g:VimTodoListsDatesEnabled = 0
+  endif
+
+  if !exists('g:VimTodoListsDatesFormat')
+    let g:VimTodoListsDatesFormat = "%X, %d %b %Y"
+  endif
+
   setlocal tabstop=2
   setlocal shiftwidth=2 expandtab
   setlocal cursorline
@@ -41,26 +50,28 @@ function! VimTodoListsInit()
     call VimTodoListsSetItemMode()
   endif
 
+  call VimTodoListsMigrate()
+
 endfunction
 
 
 " Sets the item done
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*\)\[ \]', '\1[X]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[ \]', '\1[X]', ''))
 endfunction
 
 
 " Sets the item not done
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*\)\[X\]', '\1[ ]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[X\]', '\1[ ]', ''))
 endfunction
 
 
 " Checks that line is a todo list item
 function! VimTodoListsLineIsItem(line)
-  if match(a:line, '^\s*\[[ X]\].*') != -1
+  if match(a:line, '^\s*- \[[ X]\].*') != -1
     return 1
   endif
 
@@ -70,7 +81,7 @@ endfunction
 
 " Checks that item is not done
 function! VimTodoListsItemIsNotDone(line)
-  if match(a:line, '^\s*\[ \].*') != -1
+  if match(a:line, '^\s*- \[ \].*') != -1
     return 1
   endif
 
@@ -80,7 +91,7 @@ endfunction
 
 " Checks that item is done
 function! VimTodoListsItemIsDone(line)
-  if match(a:line, '^\s*\[X\].*') != -1
+  if match(a:line, '^\s*- \[X\].*') != -1
     return 1
   endif
 
@@ -325,28 +336,40 @@ function! VimTodoListsSetItemMode()
   nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  inoremap <buffer> <CR> <CR><ESC>:VimTodoListsCreateNewItem<CR>
+  inoremap <buffer> <CR> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
+  nnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
+  nnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  vnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
+  vnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  inoremap <buffer> <Tab> <ESC>:VimTodoListsIncreaseIndent<CR>A
+  inoremap <buffer> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
 endfunction
 
+" Appends date at the end of the line
+function! VimTodoListsAppendDate()
+  if(g:VimTodoListsDatesEnabled == 1)
+    let l:date = strftime(g:VimTodoListsDatesFormat)
+    execute "s/$/ (" . l:date . ")"
+  endif
+endfunction
 
 " Creates a new item above the current line
 function! VimTodoListsCreateNewItemAbove()
-  normal! O  [ ] 
+  normal! O- [ ] 
   startinsert!
 endfunction
 
 
 " Creates a new item below the current line
 function! VimTodoListsCreateNewItemBelow()
-  normal! o  [ ] 
+  normal! o- [ ] 
   startinsert!
 endfunction
 
-
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i  [ ] 
+  normal! 0i- [ ] 
   startinsert!
 endfunction
 
@@ -354,7 +377,7 @@ endfunction
 " Moves the cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent! exec '/^\s*\[.\]'
+  silent! exec '/^\s*- \[.\]'
   silent! exec 'noh'
   normal! l
 endfunction
@@ -363,7 +386,7 @@ endfunction
 " Moves the cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent! exec '?^\s*\[.\]'
+  silent! exec '?^\s*- \[.\]'
   silent! exec 'noh'
   normal! l
 endfunction
@@ -392,6 +415,22 @@ function! VimTodoListsToggleItem()
   call cursor(l:cursor_pos[1], l:cursor_pos[4])
 endfunction
 
+" Increases the indent level
+function! VimTodoListsIncreaseIndent()
+  normal! >>
+endfunction
+
+" Decreases the indent level
+function! VimTodoListsDecreaseIndent()
+  normal! <<
+endfunction
+
+" Migrates file to new format
+function! VimTodoListsMigrate()
+  normal! mz
+  silent! execute ':%s/^\(\s*\)\(\[.\]\)/\1- \2/'
+  normal! 'z
+endfunction
 
 "Plugin startup code
 if !exists('g:vimtodolists_plugin')
@@ -415,5 +454,7 @@ if !exists('g:vimtodolists_plugin')
   command! VimTodoListsGoToNextItem silent call VimTodoListsGoToNextItem()
   command! VimTodoListsGoToPreviousItem silent call VimTodoListsGoToPreviousItem()
   command! -range VimTodoListsToggleItem silent <line1>,<line2>call VimTodoListsToggleItem()
+  command! -range VimTodoListsIncreaseIndent silent <line1>,<line2>call VimTodoListsIncreaseIndent()
+  command! -range VimTodoListsDecreaseIndent silent <line1>,<line2>call VimTodoListsDecreaseIndent()
 endif
 

@@ -28,13 +28,13 @@ Plugin is automatically applied for files with `.todo` extension.
 
 ##### TODO Items
 
-The sequence matching the expression '^\s\*[ ].\*' marks a line as a TODO list item.
+The sequence matching the expression `^\s\*- [ ].\*` marks a line as a TODO list item.
 
 ###### Example
 
 ```
-  [ ] Not done
-  [X] Done
+- [ ] Not done
+- [X] Done
 ```
 
 ##### Items Hierarchy
@@ -45,9 +45,9 @@ to be **parent** and the second to be **child**.
 ###### Example
 
 ```
-  [ ] Parent
-    [ ] Child1
-    [ ] Child2
+- [ ] Parent
+  - [ ] Child1
+  - [ ] Child2
 ```
 
 ###### Rules:
@@ -62,9 +62,9 @@ to be **parent** and the second to be **child**.
 Items are highlighted in accordance to the following scheme:
 
 ```
-  [ ] ! Important item (Underlined)
-  [ ] Normal item (Normal)
-  [X] Done item (Comment)
+- [ ] ! Important item (Underlined)
+- [ ] Normal item (Normal)
+- [X] Done item (Comment)
 ```
 
 ##### Items moving on state change
@@ -80,19 +80,19 @@ If done list doesn't exist, item is placed just after the last not done item.
 *Before*
 
 ```
-[ ] Not Done 1
-[ ] Will be done now
-[ ] Not Done 2
-[X] Done
+- [ ] Not Done 1
+- [ ] Will be done now
+- [ ] Not Done 2
+- [X] Done
 ```
 
 *After*
 
 ```
-[ ] Not Done 1
-[ ] Not Done 2
-[X] Done
-[X] Will be done now
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [X] Done
+- [X] Will be done now
 ```
 
 ###### Mark item undone
@@ -103,18 +103,18 @@ If all items are marked done, the items is moved before the first done item.
 *Before*
 
 ```
-[ ] Not Done 1
-[ ] Not Done 2
-[X] Done
-[X] Will be undone now
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [X] Done
+- [X] Will be undone now
 ```
 *After*
 
 ```
-[ ] Not Done 1
-[ ] Not Done 2
-[ ] Will be done now
-[X] Done
+- [ ] Not Done 1
+- [ ] Not Done 2
+- [ ] Will be done now
+- [X] Done
 ```
 
 ###### Interaction with items hierarchy
@@ -138,6 +138,8 @@ let g:VimTodoListsMoveItems = 0
 * `:VimTodoListsGoToNextItem`       - go to the next item
 * `:VimTodoListsGoToPreviousItem`   - go to the previous item
 * `:VimTodoListsToggleItem`         - toggles the current item (or selected items in visual mode)
+* `:VimTodoListsIncreaseIndent`     - increases the indent of current line
+* `:VimTodoListsDecreaseIndent`     - decreases the indent of current line
 
 ##### Default key mappings
 
@@ -149,6 +151,8 @@ let g:VimTodoListsMoveItems = 0
 * `O` - create new item below the cursor
 * `<Space>` - toggle current item
 * `<CR>` - create new item in `insert mode`
+* `<Tab>` - increases the indent of current (or selected) line(s)
+* `<Shift-Tab>` - decreases the indent of current (or selected) line(s)
 * `<leader>e` - switch to normal editing mode
 
 ###### Normal editing mode
@@ -172,6 +176,21 @@ function! VimTodoListsCustomMappings()
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
 endfunction
+```
+
+##### Automatic date insertion
+
+Automatic date insertion may be enabled by setting the following in `.vimrc`:
+
+```
+let g:VimTodoListsDatesEnabled = 1
+```
+
+Date format may be changed by setting the format variable to a valid
+`strftime()` string:
+
+```
+let g:VimTodoListsDatesFormat = "%a %b, %Y"
 ```
 
 Future features
@@ -235,7 +254,14 @@ Changelog
 
 * Added items moving on state change
 
+#### 0.7.0
+
+* Added automatic date insertion feature
+* Added mappings for fast increasing/decreasing indent
+* Items list are made markdown compatible (old files updated automatically on load)
+
 Credits
 -------
 
 * Alexander Serebryakov, author ([GitHub](https://github.com/aserebryakov))
+* Jake Mason, automatic date insertion ([GitHub](https://github.com/jakemason))
