@@ -292,8 +292,8 @@ SOFTWARE.
 
 * Added automatic date insertion feature
 * Added mappings for fast increasing/decreasing indent
-* Items list are made markdown compatible (old files updated automatically on
-  load)
+* Items list are made markdown compatible (old are files updated automatically
+  on load)
 
 ==============================================================================
 8. Credits                                                 *VimTodoListsCredits*
