@@ -50,6 +50,8 @@ function! VimTodoListsInit()
     call VimTodoListsSetItemMode()
   endif
 
+  call VimTodoListsMigrate()
+
 endfunction
 
 
@@ -421,6 +423,13 @@ endfunction
 " Decreases the indent level
 function! VimTodoListsDecreaseIndent()
   normal! <<
+endfunction
+
+" Migrates file to new format
+function! VimTodoListsMigrate()
+  normal! mz
+  silent! execute ':%s/^\(\s*\)\(\[.\]\)/\1- \2/'
+  normal! 'z
 endfunction
 
 "Plugin startup code

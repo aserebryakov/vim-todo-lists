@@ -257,8 +257,8 @@ Changelog
 #### 0.7.0
 
 * Added automatic date insertion feature
-* Items list are made markdown compatible
 * Added mappings for fast increasing/decreasing indent
+* Items list are made markdown compatible (old files updated automatically on load)
 
 Credits
 -------
