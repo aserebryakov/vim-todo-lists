@@ -260,6 +260,10 @@ Changelog
 * Added mappings for fast increasing/decreasing indent
 * Items list are made markdown compatible (old files are updated automatically on load)
 
+#### 0.7.1
+
+* Syntax highlight is fixed
+
 Credits
 -------
 

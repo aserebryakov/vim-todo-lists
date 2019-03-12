@@ -1,4 +1,4 @@
-*vim-todo-lists.txt*    Version 0.7.0
+*vim-todo-lists.txt*    Version 0.7.1
 *vim-todo-lists*
 
 Plugin for TODO lists management.
@@ -294,6 +294,10 @@ SOFTWARE.
 * Added mappings for fast increasing/decreasing indent
 * Items list are made markdown compatible (old files are updated automatically
   on load)
+
+0.7.1
+
+* Syntax highlight is fixed
 
 ==============================================================================
 8. Credits                                                 *VimTodoListsCredits*
