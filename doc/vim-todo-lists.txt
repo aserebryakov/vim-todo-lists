@@ -179,8 +179,8 @@ Item editing mode
 
 * j - go to next item
 * k - go to previous item
-* o - create new item above the cursor
-* O - create new item below the cursor
+* O - create new item above the cursor
+* o - create new item below the cursor
 * <Space> - toggle current item
 * <Tab> - increases the indent of current (or selected) line(s)
 * <Shift-Tab> - decreases the indent of current (or selected) line(s)
