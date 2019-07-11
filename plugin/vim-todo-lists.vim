@@ -341,7 +341,7 @@ function! VimTodoListsSetItemMode()
   nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
   nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
   vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  inoremap <buffer> <CR> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
+  inoremap <buffer> <CR> <ESC>:call VimTodoListsAppendDate()<CR>:silent call VimTodoListsCreateNewItemBelow()<CR>
   noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
   nnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
   nnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
