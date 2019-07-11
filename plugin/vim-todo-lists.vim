@@ -354,16 +354,17 @@ function! VimTodoListsAppendDate()
   endif
 endfunction
 
-" Creates a new item above the current line
+" Creates a new item above the current line with the same indent
 function! VimTodoListsCreateNewItemAbove()
-  normal! O- [ ] 
+  let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
+  execute "normal! O" . l:indentline . "- [ ] "
   startinsert!
 endfunction
 
-
-" Creates a new item below the current line
+" Creates a new item below the current line with the same indent
 function! VimTodoListsCreateNewItemBelow()
-  normal! o- [ ] 
+  let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
+  execute "normal! o" . l:indentline . "- [ ] "
   startinsert!
 endfunction
 
