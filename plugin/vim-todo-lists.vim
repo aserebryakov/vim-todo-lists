@@ -25,6 +25,11 @@
 function! VimTodoListsInit()
   set filetype=todo
 
+  " Keep the same indent as on the current line or always makes a root item
+  if !exists('g:VimTodoListsKeepSameIndent')
+    let g:VimTodoListsKeepSameIndent = 1
+  endif
+
   if !exists('g:VimTodoListsDatesEnabled')
     let g:VimTodoListsDatesEnabled = 0
   endif
@@ -356,15 +361,23 @@ endfunction
 
 " Creates a new item above the current line with the same indent
 function! VimTodoListsCreateNewItemAbove()
-  let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
-  execute "normal! O" . l:indentline . "- [ ] "
+  if (g:VimTodoListsKeepSameIndent == 1)
+    let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
+    execute "normal! O" . l:indentline . "- [ ] "
+  else
+    normal! O- [ ] 
+  endif
   startinsert!
 endfunction
 
 " Creates a new item below the current line with the same indent
 function! VimTodoListsCreateNewItemBelow()
-  let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
-  execute "normal! o" . l:indentline . "- [ ] "
+  if (g:VimTodoListsKeepSameIndent == 1)
+    let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
+    execute "normal! o" . l:indentline . "- [ ] "
+  else
+    normal! o- [ ] 
+  endif
   startinsert!
 endfunction
 
