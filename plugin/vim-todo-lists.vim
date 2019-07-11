@@ -29,6 +29,11 @@ function! VimTodoListsInit()
     let g:VimTodoListsDatesEnabled = 0
   endif
 
+  " Keep a date of creation or update with a current
+  if !exists('g:VimTodoListsDatesKeepCreation')
+    let g:VimTodoListsDatesKeepCreation = 1
+  endif
+
   if !exists('g:VimTodoListsDatesFormat')
     let g:VimTodoListsDatesFormat = "%X, %d %b %Y"
   endif
@@ -351,6 +356,12 @@ function! VimTodoListsAppendDate()
   if(g:VimTodoListsDatesEnabled == 1)
     let l:date = strftime(g:VimTodoListsDatesFormat)
     execute "s/$/ (" . l:date . ")"
+    " XXX: makes better match up of date
+    if (g:VimTodoListsDatesKeepCreation == 0)
+      silent! execute "s/ ([^)]\\+)\\( ([^)]\\+)\\)$/\\1"
+    else
+      silent! execute "s/\\( ([^)]\\+)\\) ([^)]\\+)$/\\1"
+    endif
   endif
 endfunction
 
