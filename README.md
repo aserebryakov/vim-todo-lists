@@ -10,7 +10,8 @@ Installation
 
 ##### Pathogen
 
-    $ cd ~/.vim/bundle $ git clone https://github.com/aserebryakov/vim-todo-lists.git
+    $ cd ~/.vim/bundle 
+    $ git clone https://github.com/aserebryakov/vim-todo-lists.git
 
 ##### NeoBundle
 
