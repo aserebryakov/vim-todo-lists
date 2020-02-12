@@ -431,12 +431,12 @@ endfunction
 
 " Increases the indent level
 function! VimTodoListsIncreaseIndent()
-  normal! >>
+  normal! >>6l
 endfunction
 
 " Decreases the indent level
 function! VimTodoListsDecreaseIndent()
-  normal! <<
+  normal! <<6l
 endfunction
 
 " Migrates file to new format
