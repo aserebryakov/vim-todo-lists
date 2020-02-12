@@ -322,28 +322,28 @@ function! VimTodoListsSetNormalMode()
   nunmap <buffer> O
   nunmap <buffer> j
   nunmap <buffer> k
-  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  vnoremap <buffer> <Space> :'<,'>VimTodoListsToggleItem<CR>
-  noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
+  nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  vnoremap <buffer><silent> <Space> :'<,'>VimTodoListsToggleItem<CR>
+  noremap <buffer><silent> <leader>e :silent call VimTodoListsSetItemMode()<CR>
 endfunction
 
 
 " Sets mappings for faster item navigation and editing
 function! VimTodoListsSetItemMode()
-  nnoremap <buffer> o :VimTodoListsCreateNewItemBelow<CR>
-  nnoremap <buffer> O :VimTodoListsCreateNewItemAbove<CR>
-  nnoremap <buffer> j :VimTodoListsGoToNextItem<CR>
-  nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
-  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  inoremap <buffer> <CR> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
-  noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
-  nnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
-  nnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
-  vnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
-  vnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
-  inoremap <buffer> <Tab> <ESC>:VimTodoListsIncreaseIndent<CR>A
-  inoremap <buffer> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
+  nnoremap <buffer><silent> o :VimTodoListsCreateNewItemBelow<CR>
+  nnoremap <buffer><silent> O :VimTodoListsCreateNewItemAbove<CR>
+  nnoremap <buffer><silent> j :VimTodoListsGoToNextItem<CR>
+  nnoremap <buffer><silent> k :VimTodoListsGoToPreviousItem<CR>
+  nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  vnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  inoremap <buffer><silent> <CR> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
+  noremap <buffer><silent> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
+  nnoremap <buffer><silent> <Tab> :VimTodoListsIncreaseIndent<CR>
+  nnoremap <buffer><silent> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  vnoremap <buffer><silent> <Tab> :VimTodoListsIncreaseIndent<CR>
+  vnoremap <buffer><silent> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  inoremap <buffer><silent> <Tab> <ESC>:VimTodoListsIncreaseIndent<CR>A
+  inoremap <buffer><silent> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
 endfunction
 
 " Appends date at the end of the line
