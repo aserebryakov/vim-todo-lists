@@ -63,20 +63,20 @@ endfunction
 " Sets the item done
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[ \]', '\1[X]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*\* \)\[ \]', '\1[X]', ''))
 endfunction
 
 
 " Sets the item not done
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[X\]', '\1[ ]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*\* \)\[X\]', '\1[ ]', ''))
 endfunction
 
 
 " Checks that line is a todo list item
 function! VimTodoListsLineIsItem(line)
-  if match(a:line, '^\s*- \[[ X]\].*') != -1
+  if match(a:line, '^\s*\* \[[ X]\].*') != -1
     return 1
   endif
 
@@ -86,7 +86,7 @@ endfunction
 
 " Checks that item is not done
 function! VimTodoListsItemIsNotDone(line)
-  if match(a:line, '^\s*- \[ \].*') != -1
+  if match(a:line, '^\s*\* \[ \].*') != -1
     return 1
   endif
 
@@ -96,7 +96,7 @@ endfunction
 
 " Checks that item is done
 function! VimTodoListsItemIsDone(line)
-  if match(a:line, '^\s*- \[X\].*') != -1
+  if match(a:line, '^\s*\* \[X\].*') != -1
     return 1
   endif
 
@@ -363,9 +363,9 @@ endfunction
 function! VimTodoListsCreateNewItemAbove()
   if (g:VimTodoListsKeepSameIndent == 1)
     let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
-    execute "normal! O" . l:indentline . "- [ ] "
+    execute "normal! O" . l:indentline . "* [ ] "
   else
-    normal! O- [ ] 
+    normal! O* [ ] 
   endif
   startinsert!
 endfunction
@@ -374,16 +374,16 @@ endfunction
 function! VimTodoListsCreateNewItemBelow()
   if (g:VimTodoListsKeepSameIndent == 1)
     let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
-    execute "normal! o" . l:indentline . "- [ ] "
+    execute "normal! o" . l:indentline . "* [ ] "
   else
-    normal! o- [ ] 
+    normal! o* [ ] 
   endif
   startinsert!
 endfunction
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i- [ ] 
+  normal! 0i* [ ] 
   startinsert!
 endfunction
 
@@ -391,7 +391,7 @@ endfunction
 " Moves the cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent! exec '/^\s*- \[.\]'
+  silent! exec '/^\s*\* \[.\]'
   silent! exec 'noh'
   normal! 6l
 endfunction
@@ -400,7 +400,7 @@ endfunction
 " Moves the cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent! exec '?^\s*- \[.\]'
+  silent! exec '?^\s*\* \[.\]'
   silent! exec 'noh'
   normal! 6l
 endfunction
@@ -442,7 +442,7 @@ endfunction
 " Migrates file to new format
 function! VimTodoListsMigrate()
   normal! mz
-  silent! execute ':%s/^\(\s*\)\(\[.\]\)/\1- \2/'
+  silent! execute ':%s/^\(\s*\)\(\[.\]\)/\1\* \2/'
   normal! 'z
 endfunction
 
