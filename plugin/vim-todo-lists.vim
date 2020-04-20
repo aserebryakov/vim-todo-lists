@@ -442,7 +442,7 @@ endfunction
 " Migrates file to new format
 function! VimTodoListsMigrate()
   normal! mz
-  silent! execute ':%s/^\(\s*\)\(\[.\]\)/\1\* \2/'
+  silent! execute ':%s/^\(\s*\)\(- \|\)\(\[.\]\)/\1\* \3/'
   normal! 'z
 endfunction
 
@@ -471,4 +471,3 @@ if !exists('g:vimtodolists_plugin')
   command! -range VimTodoListsIncreaseIndent silent <line1>,<line2>call VimTodoListsIncreaseIndent()
   command! -range VimTodoListsDecreaseIndent silent <line1>,<line2>call VimTodoListsDecreaseIndent()
 endif
-
