@@ -43,6 +43,8 @@ function! VimTodoListsInit()
   setlocal cursorline
   setlocal noautoindent
 
+  call VimTodoListsInitializeTokens()
+
   if exists('g:VimTodoListsCustomKeyMapper')
     try
       call call(g:VimTodoListsCustomKeyMapper, [])
@@ -59,24 +61,44 @@ function! VimTodoListsInit()
 
 endfunction
 
+" Initializes done/undone tokens
+function! VimTodoListsInitializeTokens()
+  let g:VimTodoListsEscaped = '*[]'
+
+  if !exists('g:VimTodoListsUndoneItem')
+    let g:VimTodoListsUndoneItem = '* [ ]'
+  endif
+
+  if !exists('g:VimTodoListsDoneItem')
+    let g:VimTodoListsDoneItem = '* [X]'
+  endif
+
+  let g:VimTodoListsDoneItemEscaped = escape(g:VimTodoListsDoneItem, g:VimTodoListsEscaped)
+  let g:VimTodoListsUndoneItemEscaped = escape(g:VimTodoListsUndoneItem, g:VimTodoListsEscaped)
+endfunction
+
+
+function! VimTodoListsInitializeSyntax()
+" TODO: Implement
+endfunction
 
 " Sets the item done
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*\* \)\[ \]', '\1[X]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*\)'.g:VimTodoListsUndoneItemEscaped, '\1'.g:VimTodoListsDoneItem, ''))
 endfunction
 
 
 " Sets the item not done
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*\* \)\[X\]', '\1[ ]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*\)'.g:VimTodoListsDoneItemEscaped, '\1'.g:VimTodoListsUndoneItem, ''))
 endfunction
 
 
 " Checks that line is a todo list item
 function! VimTodoListsLineIsItem(line)
-  if match(a:line, '^\s*\* \[[ X]\].*') != -1
+  if match(a:line, '^\s*\('.g:VimTodoListsDoneItemEscaped.'\|'.g:VimTodoListsUndoneItemEscaped.'\).*') != -1
     return 1
   endif
 
@@ -86,7 +108,7 @@ endfunction
 
 " Checks that item is not done
 function! VimTodoListsItemIsNotDone(line)
-  if match(a:line, '^\s*\* \[ \].*') != -1
+  if match(a:line, '^\s*'.g:VimTodoListsUndoneItemEscaped.'.*') != -1
     return 1
   endif
 
@@ -96,7 +118,7 @@ endfunction
 
 " Checks that item is done
 function! VimTodoListsItemIsDone(line)
-  if match(a:line, '^\s*\* \[X\].*') != -1
+  if match(a:line, '^\s*'.g:VimTodoListsDoneItemEscaped.'.*') != -1
     return 1
   endif
 
