@@ -44,6 +44,7 @@ function! VimTodoListsInit()
   setlocal noautoindent
 
   call VimTodoListsInitializeTokens()
+  call VimTodoListsInitializeSyntax()
 
   if exists('g:VimTodoListsCustomKeyMapper')
     try
@@ -77,9 +78,15 @@ function! VimTodoListsInitializeTokens()
   let g:VimTodoListsUndoneItemEscaped = escape(g:VimTodoListsUndoneItem, g:VimTodoListsEscaped)
 endfunction
 
-
+" Initiaizes syntax
 function! VimTodoListsInitializeSyntax()
-" TODO: Implement
+  execute("syntax match vimTodoListsDone '^\\s*".g:VimTodoListsDoneItemEscaped.".*'")
+  execute("syntax match vimTodoListsNormal '^\\s*".g:VimTodoListsUndoneItemEscaped.".*'")
+  execute("syntax match vimTodoListsImportant '^\\s*".g:VimTodoListsUndoneItemEscaped."\\s*!.*'")
+
+  highlight link vimTodoListsDone Comment
+  highlight link vimTodoListsNormal Normal
+  highlight link vimTodoListsImportant Underlined
 endfunction
 
 " Sets the item done
