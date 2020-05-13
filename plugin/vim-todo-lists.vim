@@ -387,29 +387,29 @@ endfunction
 
 " Creates a new item above the current line with the same indent
 function! VimTodoListsCreateNewItemAbove()
-  if (g:VimTodoListsKeepSameIndent == 1)
-    let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
-    execute "normal! O" . l:indentline . "* [ ] "
-  else
-    normal! O* [ ] 
-  endif
+  execute "normal! O" . VimTodoListsIdent() . g:VimTodoListsUndoneItem . " "
   startinsert!
 endfunction
 
 " Creates a new item below the current line with the same indent
 function! VimTodoListsCreateNewItemBelow()
+  execute "normal! o" . VimTodoListsIdent() . g:VimTodoListsUndoneItem . " "
+  startinsert!
+endfunction
+
+function! VimTodoListsIdent()
   if (g:VimTodoListsKeepSameIndent == 1)
     let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
-    execute "normal! o" . l:indentline . "* [ ] "
   else
-    normal! o* [ ] 
+    let l:indentline = ""
   endif
-  startinsert!
+
+  return l:indentline
 endfunction
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i* [ ] 
+  execute "normal! 0i" . g:VimTodoListsUndoneItem . " "
   startinsert!
 endfunction
 
@@ -417,7 +417,7 @@ endfunction
 " Moves the cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent! exec '/^\s*\* \[.\]'
+  silent! exec '/^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItem . '\)'
   silent! exec 'noh'
   normal! 6l
 endfunction
@@ -426,7 +426,7 @@ endfunction
 " Moves the cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent! exec '?^\s*\* \[.\]'
+  silent! exec '?^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItem . '\)'
   silent! exec 'noh'
   normal! 6l
 endfunction
