@@ -25,17 +25,35 @@ directory.
 Usage
 -----
 
-Plugin is automatically applied for files with `.todo` extension.
+Plugin is automatically applied for files with `.todo.md` extension.
 
 ##### TODO Items
 
-The sequence matching the expression `^\s\*- [ ].\*` marks a line as a TODO list item.
+The following example represents TODO items definition by default.
 
 ###### Example
 
 ```
 - [ ] Not done
 - [X] Done
+```
+
+###### Custom Configuration
+
+You can customize the representation of the item by defining the following variables
+to your `.vimrc`
+
+```
+let g:VimTodoListsUndoneItem = '- [X]'
+let g:VimTodoListsDoneItem = '- [V]'
+```
+
+###### Important Item
+
+Important item is defined as `undone item string !`.
+
+```
+- [ ] ! Important item
 ```
 
 ##### Items Hierarchy
@@ -194,21 +212,15 @@ Date format may be changed by setting the format variable to a valid
 let g:VimTodoListsDatesFormat = "%a %b, %Y"
 ```
 
-Future features
----------------
-
-* TODO lists folder selection
-* Create new TODO list
-* Archive current TODO list in the folder
-* Show archived lists
-* Open list from archive
-
 Contribution
 ------------
 
 Source code and issues are hosted on GitHub:
 
     https://github.com/aserebryakov/vim-todo-lists
+
+If you are going to make a pull request, you should use `dev` branch for
+functionality implementation to simplify the merge procedure.
 
 License
 -------
@@ -218,42 +230,18 @@ License
 Changelog
 ---------
 
-#### 0.1.0
+#### 0.8.0
 
-* Easy navigation in TODO list
-* Easy adding new items
-* Easy items toggling
+**Breaking Change**
 
-#### 0.1.1
+* Added option to configure TODO items
+* File extension changed to `.todo.md` from `.todo`
+* Item indentation level is kept when creating a new one
+* Removed migration from older formats
 
-* Fixes broken compatibility with the [filestyle](https://github.com/aserebryakov/filestyle) plugin
+#### 0.7.1
 
-#### 0.2.0
-
-* Added an option to configure custom key mappings
-
-#### 0.3.0
-
-* Added items toggling in visual mode
-* Improves work with indentations of list items
-* Fixed the error when trying to navigate the buffer that doesn't contain items
-
-#### 0.4.0
-
-* Added items hierarchy support
-
-#### 0.5.0
-
-* Added items highlighting
-
-#### 0.5.1
-
-* Fixed the annoying noise when navigating over items in default mode
-* Fixed the cursor position after the item is toggled
-
-#### 0.6.0
-
-* Added items moving on state change
+* Syntax highlight is fixed
 
 #### 0.7.0
 
@@ -261,12 +249,47 @@ Changelog
 * Added mappings for fast increasing/decreasing indent
 * Items list are made markdown compatible (old files are updated automatically on load)
 
-#### 0.7.1
+#### 0.6.0
 
-* Syntax highlight is fixed
+* Added items moving on state change
 
-Credits
--------
+#### 0.5.1
+
+* Fixed the annoying noise when navigating over items in default mode
+* Fixed the cursor position after the item is toggled
+
+#### 0.5.0
+
+* Added items highlighting
+
+#### 0.4.0
+
+* Added items hierarchy support
+
+#### 0.3.0
+
+* Added items toggling in visual mode
+* Improves work with indentations of list items
+* Fixed the error when trying to navigate the buffer that doesn't contain items
+
+#### 0.2.0
+
+* Added an option to configure custom key mappings
+
+#### 0.1.1
+
+* Fixes broken compatibility with the [filestyle](https://github.com/aserebryakov/filestyle) plugin
+
+#### 0.1.0
+
+* Navigation in TODO list
+* Adding new items
+* Items toggling
+
+Contributors
+------------
 
 * Alexander Serebryakov, author ([GitHub](https://github.com/aserebryakov))
-* Jake Mason, automatic date insertion ([GitHub](https://github.com/jakemason))
+* Jake Mason, contributor ([GitHub](https://github.com/jakemason))
+* Alexandr Kondratev, contributor ([GitHub](https://github.com/theg4sh))
+* Jannis Jorre, contributor ([GitHub](https://github.com/jeyj0))
