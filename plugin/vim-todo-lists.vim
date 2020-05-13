@@ -57,9 +57,6 @@ function! VimTodoListsInit()
   else
     call VimTodoListsSetItemMode()
   endif
-
-  call VimTodoListsMigrate()
-
 endfunction
 
 " Initializes done/undone tokens
@@ -67,11 +64,11 @@ function! VimTodoListsInitializeTokens()
   let g:VimTodoListsEscaped = '*[]'
 
   if !exists('g:VimTodoListsUndoneItem')
-    let g:VimTodoListsUndoneItem = '* [ ]'
+    let g:VimTodoListsUndoneItem = '- [ ]'
   endif
 
   if !exists('g:VimTodoListsDoneItem')
-    let g:VimTodoListsDoneItem = '* [X]'
+    let g:VimTodoListsDoneItem = '- [X]'
   endif
 
   let g:VimTodoListsDoneItemEscaped = escape(g:VimTodoListsDoneItem, g:VimTodoListsEscaped)
@@ -466,13 +463,6 @@ endfunction
 " Decreases the indent level
 function! VimTodoListsDecreaseIndent()
   normal! <<6l
-endfunction
-
-" Migrates file to new format
-function! VimTodoListsMigrate()
-  normal! mz
-  silent! execute ':%s/^\(\s*\)\(- \|\)\(\[.\]\)/\1\* \3/'
-  normal! 'z
 endfunction
 
 "Plugin startup code
