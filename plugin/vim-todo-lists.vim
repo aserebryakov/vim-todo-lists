@@ -417,7 +417,7 @@ endfunction
 " Moves the cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent! exec '/^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItem . '\)'
+  silent! exec '/^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItemEscaped . '\)'
   silent! exec 'noh'
   normal! 6l
 endfunction
@@ -426,7 +426,7 @@ endfunction
 " Moves the cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent! exec '?^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItem . '\)'
+  silent! exec '?^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItemEscaped . '\)'
   silent! exec 'noh'
   normal! 6l
 endfunction
