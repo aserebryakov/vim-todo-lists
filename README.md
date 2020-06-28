@@ -239,6 +239,8 @@ Changelog
 * Item indentation level is kept when creating a new one
 * Removed migration from older formats
 * Added plugin initialization for `todo` filetype
+* New item can be created with keypad Enter key
+* Makes normal mode keys more consistent
 
 #### 0.7.1
 
@@ -294,4 +296,5 @@ Contributors
 * Jake Mason, contributor ([GitHub](https://github.com/jakemason))
 * Alexandr Kondratev, contributor ([GitHub](https://github.com/theg4sh))
 * Jannis Jorre, contributor ([GitHub](https://github.com/jeyj0))
-* thehunmonkgroup ([GitHub](https://github.com/thehunmonkgroup))
+* thehunmonkgroup, contributor ([GitHub](https://github.com/thehunmonkgroup))
+* Suchandra Thapa, contributor ([GitHub](https://github.com/sthapa))

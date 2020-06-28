@@ -353,6 +353,8 @@ function! VimTodoListsSetNormalMode()
   nunmap <buffer> O
   nunmap <buffer> j
   nunmap <buffer> k
+  iunmap <buffer> <CR>
+  iunmap <buffer> <kEnter>
   nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
   vnoremap <buffer><silent> <Space> :'<,'>VimTodoListsToggleItem<CR>
   noremap <buffer><silent> <leader>e :silent call VimTodoListsSetItemMode()<CR>
