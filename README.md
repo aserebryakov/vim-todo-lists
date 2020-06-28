@@ -10,7 +10,7 @@ Installation
 
 ##### Pathogen
 
-    $ cd ~/.vim/bundle 
+    $ cd ~/.vim/bundle
     $ git clone https://github.com/aserebryakov/vim-todo-lists.git
 
 ##### NeoBundle
@@ -238,6 +238,7 @@ Changelog
 * File extension changed to `.todo.md` from `.todo`
 * Item indentation level is kept when creating a new one
 * Removed migration from older formats
+* Added plugin initialization for `todo` filetype
 
 #### 0.7.1
 
@@ -293,3 +294,4 @@ Contributors
 * Jake Mason, contributor ([GitHub](https://github.com/jakemason))
 * Alexandr Kondratev, contributor ([GitHub](https://github.com/theg4sh))
 * Jannis Jorre, contributor ([GitHub](https://github.com/jeyj0))
+* thehunmonkgroup ([GitHub](https://github.com/thehunmonkgroup))
