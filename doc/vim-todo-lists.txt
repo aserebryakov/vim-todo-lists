@@ -284,6 +284,9 @@ SOFTWARE.
 * File extension changed to `.todo.md` from `.todo`
 * Item indentation level is kept when creating a new one
 * Removed migration from older formats
+* Added plugin initialization for `todo` filetype
+* New item can be created with keypad Enter key
+* Makes normal mode keys more consistent
 
 0.7.1
 
@@ -335,10 +338,12 @@ SOFTWARE.
 ==============================================================================
 7. Conributors                                        *VimTodoListsContributors*
 
-* Alexander Serebryakov, author https://github.com/aserebryakov
-* Jake Mason, contributor https://github.com/jakemason
-* Alexandr Kondratev, contributor https://github.com/theg4sh
-* Jannis Jorre, contributor https://github.com/jeyj0
+* Alexander Serebryakov, author ([GitHub](https://github.com/aserebryakov))
+* Jake Mason, contributor ([GitHub](https://github.com/jakemason))
+* Alexandr Kondratev, contributor ([GitHub](https://github.com/theg4sh))
+* Jannis Jorre, contributor ([GitHub](https://github.com/jeyj0))
+* thehunmonkgroup, contributor ([GitHub](https://github.com/thehunmonkgroup))
+* Suchandra Thapa, contributor ([GitHub](https://github.com/sthapa))
 
 ==============================================================================
 # vim:tw=78:ts=8:ft=help:norl:
