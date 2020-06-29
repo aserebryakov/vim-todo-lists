@@ -1,6 +1,6 @@
 " MIT License
 "
-" Copyright (c) 2019 Alexander Serebryakov (alex.serebr@gmail.com)
+" Copyright (c) 2020 Alexander Serebryakov (alex.serebr@gmail.com)
 "
 " Permission is hereby granted, free of charge, to any person obtaining a copy
 " of this software and associated documentation files (the "Software"), to
@@ -25,6 +25,11 @@
 function! VimTodoListsInit()
   set filetype=todo
 
+  " Keep the same indent as on the current line or always makes a root item
+  if !exists('g:VimTodoListsKeepSameIndent')
+    let g:VimTodoListsKeepSameIndent = 1
+  endif
+
   if !exists('g:VimTodoListsDatesEnabled')
     let g:VimTodoListsDatesEnabled = 0
   endif
@@ -38,6 +43,9 @@ function! VimTodoListsInit()
   setlocal cursorline
   setlocal noautoindent
 
+  call VimTodoListsInitializeTokens()
+  call VimTodoListsInitializeSyntax()
+
   if exists('g:VimTodoListsCustomKeyMapper')
     try
       call call(g:VimTodoListsCustomKeyMapper, [])
@@ -49,29 +57,52 @@ function! VimTodoListsInit()
   else
     call VimTodoListsSetItemMode()
   endif
-
-  call VimTodoListsMigrate()
-
 endfunction
 
+" Initializes done/undone tokens
+function! VimTodoListsInitializeTokens()
+  let g:VimTodoListsEscaped = '*[]'
+
+  if !exists('g:VimTodoListsUndoneItem')
+    let g:VimTodoListsUndoneItem = '- [ ]'
+  endif
+
+  if !exists('g:VimTodoListsDoneItem')
+    let g:VimTodoListsDoneItem = '- [X]'
+  endif
+
+  let g:VimTodoListsDoneItemEscaped = escape(g:VimTodoListsDoneItem, g:VimTodoListsEscaped)
+  let g:VimTodoListsUndoneItemEscaped = escape(g:VimTodoListsUndoneItem, g:VimTodoListsEscaped)
+endfunction
+
+" Initiaizes syntax
+function! VimTodoListsInitializeSyntax()
+  execute("syntax match vimTodoListsDone '^\\s*".g:VimTodoListsDoneItemEscaped.".*'")
+  execute("syntax match vimTodoListsNormal '^\\s*".g:VimTodoListsUndoneItemEscaped.".*'")
+  execute("syntax match vimTodoListsImportant '^\\s*".g:VimTodoListsUndoneItemEscaped."\\s*!.*'")
+
+  highlight link vimTodoListsDone Comment
+  highlight link vimTodoListsNormal Normal
+  highlight link vimTodoListsImportant Underlined
+endfunction
 
 " Sets the item done
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[ \]', '\1[X]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*\)'.g:VimTodoListsUndoneItemEscaped, '\1'.g:VimTodoListsDoneItem, ''))
 endfunction
 
 
 " Sets the item not done
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
-  call setline(a:lineno, substitute(l:line, '^\(\s*- \)\[X\]', '\1[ ]', ''))
+  call setline(a:lineno, substitute(l:line, '^\(\s*\)'.g:VimTodoListsDoneItemEscaped, '\1'.g:VimTodoListsUndoneItem, ''))
 endfunction
 
 
 " Checks that line is a todo list item
 function! VimTodoListsLineIsItem(line)
-  if match(a:line, '^\s*- \[[ X]\].*') != -1
+  if match(a:line, '^\s*\('.g:VimTodoListsDoneItemEscaped.'\|'.g:VimTodoListsUndoneItemEscaped.'\).*') != -1
     return 1
   endif
 
@@ -81,7 +112,7 @@ endfunction
 
 " Checks that item is not done
 function! VimTodoListsItemIsNotDone(line)
-  if match(a:line, '^\s*- \[ \].*') != -1
+  if match(a:line, '^\s*'.g:VimTodoListsUndoneItemEscaped.'.*') != -1
     return 1
   endif
 
@@ -91,7 +122,7 @@ endfunction
 
 " Checks that item is done
 function! VimTodoListsItemIsDone(line)
-  if match(a:line, '^\s*- \[X\].*') != -1
+  if match(a:line, '^\s*'.g:VimTodoListsDoneItemEscaped.'.*') != -1
     return 1
   endif
 
@@ -322,28 +353,31 @@ function! VimTodoListsSetNormalMode()
   nunmap <buffer> O
   nunmap <buffer> j
   nunmap <buffer> k
-  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  vnoremap <buffer> <Space> :'<,'>VimTodoListsToggleItem<CR>
-  noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
+  iunmap <buffer> <CR>
+  iunmap <buffer> <kEnter>
+  nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  vnoremap <buffer><silent> <Space> :'<,'>VimTodoListsToggleItem<CR>
+  noremap <buffer><silent> <leader>e :silent call VimTodoListsSetItemMode()<CR>
 endfunction
 
 
 " Sets mappings for faster item navigation and editing
 function! VimTodoListsSetItemMode()
-  nnoremap <buffer> o :VimTodoListsCreateNewItemBelow<CR>
-  nnoremap <buffer> O :VimTodoListsCreateNewItemAbove<CR>
-  nnoremap <buffer> j :VimTodoListsGoToNextItem<CR>
-  nnoremap <buffer> k :VimTodoListsGoToPreviousItem<CR>
-  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  vnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
-  inoremap <buffer> <CR> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
-  noremap <buffer> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
-  nnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
-  nnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
-  vnoremap <buffer> <Tab> :VimTodoListsIncreaseIndent<CR>
-  vnoremap <buffer> <S-Tab> :VimTodoListsDecreaseIndent<CR>
-  inoremap <buffer> <Tab> <ESC>:VimTodoListsIncreaseIndent<CR>A
-  inoremap <buffer> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
+  nnoremap <buffer><silent> o :VimTodoListsCreateNewItemBelow<CR>
+  nnoremap <buffer><silent> O :VimTodoListsCreateNewItemAbove<CR>
+  nnoremap <buffer><silent> j :VimTodoListsGoToNextItem<CR>
+  nnoremap <buffer><silent> k :VimTodoListsGoToPreviousItem<CR>
+  nnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  vnoremap <buffer><silent> <Space> :VimTodoListsToggleItem<CR>
+  inoremap <buffer><silent> <CR> <ESC>:call VimTodoListsAppendDate()<CR>:silent call VimTodoListsCreateNewItemBelow()<CR>
+  inoremap <buffer><silent> <kEnter> <ESC>:call VimTodoListsAppendDate()<CR>A<CR><ESC>:VimTodoListsCreateNewItem<CR>
+  noremap <buffer><silent> <leader>e :silent call VimTodoListsSetNormalMode()<CR>
+  nnoremap <buffer><silent> <Tab> :VimTodoListsIncreaseIndent<CR>
+  nnoremap <buffer><silent> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  vnoremap <buffer><silent> <Tab> :VimTodoListsIncreaseIndent<CR>
+  vnoremap <buffer><silent> <S-Tab> :VimTodoListsDecreaseIndent<CR>
+  inoremap <buffer><silent> <Tab> <ESC>:VimTodoListsIncreaseIndent<CR>A
+  inoremap <buffer><silent> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
 endfunction
 
 " Appends date at the end of the line
@@ -354,22 +388,31 @@ function! VimTodoListsAppendDate()
   endif
 endfunction
 
-" Creates a new item above the current line
+" Creates a new item above the current line with the same indent
 function! VimTodoListsCreateNewItemAbove()
-  normal! O- [ ] 
+  execute "normal! O" . VimTodoListsIdent() . g:VimTodoListsUndoneItem . " "
   startinsert!
 endfunction
 
-
-" Creates a new item below the current line
+" Creates a new item below the current line with the same indent
 function! VimTodoListsCreateNewItemBelow()
-  normal! o- [ ] 
+  execute "normal! o" . VimTodoListsIdent() . g:VimTodoListsUndoneItem . " "
   startinsert!
+endfunction
+
+function! VimTodoListsIdent()
+  if (g:VimTodoListsKeepSameIndent == 1)
+    let l:indentline = join(map(range(1,indent(line('.'))), '" "'), '')
+  else
+    let l:indentline = ""
+  endif
+
+  return l:indentline
 endfunction
 
 " Creates a new item in the current line
 function! VimTodoListsCreateNewItem()
-  normal! 0i- [ ] 
+  execute "normal! 0i" . g:VimTodoListsUndoneItem . " "
   startinsert!
 endfunction
 
@@ -377,18 +420,18 @@ endfunction
 " Moves the cursor to the next item
 function! VimTodoListsGoToNextItem()
   normal! $
-  silent! exec '/^\s*- \[.\]'
+  silent! exec '/^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItemEscaped . '\)'
   silent! exec 'noh'
-  normal! l
+  normal! 6l
 endfunction
 
 
 " Moves the cursor to the previous item
 function! VimTodoListsGoToPreviousItem()
   normal! 0
-  silent! exec '?^\s*- \[.\]'
+  silent! exec '?^\s*\(' . g:VimTodoListsUndoneItemEscaped . '\|' . g:VimTodoListsDoneItemEscaped . '\)'
   silent! exec 'noh'
-  normal! l
+  normal! 6l
 endfunction
 
 
@@ -417,19 +460,12 @@ endfunction
 
 " Increases the indent level
 function! VimTodoListsIncreaseIndent()
-  normal! >>
+  normal! >>6l
 endfunction
 
 " Decreases the indent level
 function! VimTodoListsDecreaseIndent()
-  normal! <<
-endfunction
-
-" Migrates file to new format
-function! VimTodoListsMigrate()
-  normal! mz
-  silent! execute ':%s/^\(\s*\)\(\[.\]\)/\1- \2/'
-  normal! 'z
+  normal! <<6l
 endfunction
 
 "Plugin startup code
@@ -444,7 +480,8 @@ if !exists('g:vimtodolists_plugin')
   "Defining auto commands
   augroup vimtodolists_auto_commands
     autocmd!
-    autocmd BufRead,BufNewFile *.todo call VimTodoListsInit()
+    autocmd BufRead,BufNewFile *.todo.md call VimTodoListsInit()
+    autocmd FileType todo call VimTodoListsInit()
   augroup end
 
   "Defining plugin commands
@@ -457,4 +494,3 @@ if !exists('g:vimtodolists_plugin')
   command! -range VimTodoListsIncreaseIndent silent <line1>,<line2>call VimTodoListsIncreaseIndent()
   command! -range VimTodoListsDecreaseIndent silent <line1>,<line2>call VimTodoListsDecreaseIndent()
 endif
-

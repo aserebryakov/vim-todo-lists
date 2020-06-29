@@ -1,4 +1,4 @@
-*vim-todo-lists.txt*    Version 0.7.1
+*vim-todo-lists.txt*    Version 0.8.0
 *vim-todo-lists*
 
 Plugin for TODO lists management.
@@ -10,10 +10,9 @@ CONTENTS                                                  *VimTodoListsContents*
 2. Installation .... |VimTodoListsInstallation|
 3. Usage ........... |VimTodoListsUsage|
 4. Contribution .... |VimTodoListsContribution|
-5. Future Features.. |VimTodoListsFutureFeatures|
-6. License ......... |VimTodoListsLicense|
-7. Changelog ....... |VimTodoListsChangelog|
-8. Credits ......... |VimTodoListsCredits|
+5. License ......... |VimTodoListsLicense|
+6. Changelog ....... |VimTodoListsChangelog|
+7. Contributors .... |VimTodoListsContributors|
 
 ==============================================================================
 1. Introduction                                       *VimTodoListsIntroduction*
@@ -21,9 +20,8 @@ CONTENTS                                                  *VimTodoListsContents*
 vim-todo-lists plugin is intended for TODO lists management.
 
 Current version contains only key bindings that simplify the navigation
-between TODO list (should have '.todo' extension) items, creation and update.
-
-See |VimTodoListsFutureFeatures|.
+between TODO list (should have '.todo.md' extension) items, creation and
+update.
 
 ==============================================================================
 2. Installation                                       *VimTodoListsInstallation*
@@ -45,18 +43,36 @@ directory.
 ==============================================================================
 3. Usage                                                     *VimTodoListsUsage*
 
-Plugin is automatically applied for files with `.todo` extension.
+Plugin is automatically applied for files with `.todo.md` extension.
 
 TODO Items
 ----------
 
-The sequence matching the expression `^\s\*- [ ].\*` marks a line as a TODO list item.
+The following example represents TODO items definition by default.
 
 Example
 -------
 
 - [ ] Not done
 - [X] Done
+
+Custom Configuration
+--------------------
+
+You can customize the representation of the item by defining the following variables
+to your `.vimrc`
+
+let g:VimTodoListsUndoneItem = '- [X]'
+let g:VimTodoListsDoneItem = '- [V]'
+
+Important Item
+--------------
+
+Important item is defined as 'undone item string !'.
+
+```
+- [ ] ! Important item
+```
 
 Items Hierarchy
 ---------------
@@ -86,7 +102,6 @@ Items are highlighted in accordance to the following scheme:
 - [ ] ! Important item (Underlined)
 - [ ] Normal item (Normal)
 - [X] Done item (Comment)
-
 
 
 Items moving on state change
@@ -194,6 +209,22 @@ Normal editing mode
 * <Space> - toggle current item
 * <leader>e - switch to item editing mode
 
+Custom key mappings
+-------------------
+
+The `g:VimTodoListsCustomKeyMapper` variable should contain a name of the function
+implementing custom mappings.
+
+Example
+-------
+
+let g:VimTodoListsCustomKeyMapper = 'VimTodoListsCustomMappings'
+
+function! VimTodoListsCustomMappings()
+  nnoremap <buffer> s :VimTodoListsToggleItem<CR>
+  nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
+  noremap <buffer> <leader>e :silent call VimTodoListsSetItemMode()<CR>
+endfunction
 
 Automatic date insertion
 ------------------------
@@ -208,23 +239,17 @@ strftime() string:
 let g:VimTodoListsDatesFormat = "%a %b, %Y"
 
 ==============================================================================
-4. Future Features                                  *VimTodoListsFutureFeatures*
-
-* TODO lists folder selection
-* Create new TODO list
-* Archive current TODO list in the folder
-* Show archived lists
-* Open list from archive
-
-==============================================================================
-5. Contribution                                       *VimTodoListsContribution*
+4. Contribution                                       *VimTodoListsContribution*
 
 Source code and issues are hosted on GitHub:
 
 https://github.com/aserebryakov/vim-todo-lists
 
+If you are going to make a pull request, you should use `dev` branch for
+functionality implementation to simplify the merge procedure.
+
 ==============================================================================
-6. License                                                 *VimTodoListsLicense*
+5. License                                                 *VimTodoListsLicense*
 
 MIT License
 
@@ -249,21 +274,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ==============================================================================
-7. Changelog                                             *VimTodoListsChangelog*
+6. Changelog                                             *VimTodoListsChangelog*
 
-0.1.0
+0.8.0
 
-* Easy navigation in TODO list
-* Easy adding new items
-* Easy items toggling
+**Breaking Change**
 
-0.1.1
+* Added option to configure TODO items
+* File extension changed to `.todo.md` from `.todo`
+* Item indentation level is kept when creating a new one
+* Removed migration from older formats
+* Added plugin initialization for `todo` filetype
+* New item can be created with keypad Enter key
+* Makes normal mode keys more consistent
 
-* Fixes broken compatibility with the [filestyle] plugin
+0.7.1
 
-0.2.0
+* Syntax highlight is fixed
 
-* Added an option to configure custom key mappings
+0.7.0
+
+* Added automatic date insertion feature
+* Added mappings for fast increasing/decreasing indent
+* Items list are made markdown compatible (old files are updated automatically on load)
+
+0.6.0
+
+* Added items moving on state change
+
+0.5.1
+
+* Fixed the annoying noise when navigating over items in default mode
+* Fixed the cursor position after the item is toggled
+
+0.5.0
+
+* Added items highlighting
+
+0.4.0
+
+* Added items hierarchy support
 
 0.3.0
 
@@ -271,39 +321,29 @@ SOFTWARE.
 * Improves work with indentations of list items
 * Fixed the error when trying to navigate the buffer that doesn't contain items
 
-0.4.0
+0.2.0
 
-* Added items hierarchy support
+* Added an option to configure custom key mappings
 
-0.5.0
+0.1.1
 
-* Added items highlighting
+* Fixes broken compatibility with the [filestyle](https://github.com/aserebryakov/filestyle) plugin
 
-0.5.1
+0.1.0
 
-* Fixed the annoying noise when navigating over items in default mode
-* Fixed the cursor position after the item is toggled
-
-0.6.0
-
-* Added items moving on state change
-
-0.7.0
-
-* Added automatic date insertion feature
-* Added mappings for fast increasing/decreasing indent
-* Items list are made markdown compatible (old files are updated automatically
-  on load)
-
-0.7.1
-
-* Syntax highlight is fixed
+* Navigation in TODO list
+* Adding new items
+* Items toggling
 
 ==============================================================================
-8. Credits                                                 *VimTodoListsCredits*
+7. Conributors                                        *VimTodoListsContributors*
 
-* Alexander Serebryakov (author)  https://github.com/aserebryakov
-* Jake Mason (automatic date insertion) https://github.com/jakemason
+* Alexander Serebryakov, author ([GitHub](https://github.com/aserebryakov))
+* Jake Mason, contributor ([GitHub](https://github.com/jakemason))
+* Alexandr Kondratev, contributor ([GitHub](https://github.com/theg4sh))
+* Jannis Jorre, contributor ([GitHub](https://github.com/jeyj0))
+* thehunmonkgroup, contributor ([GitHub](https://github.com/thehunmonkgroup))
+* Suchandra Thapa, contributor ([GitHub](https://github.com/sthapa))
 
 ==============================================================================
 # vim:tw=78:ts=8:ft=help:norl:
