@@ -376,8 +376,6 @@ function! VimTodoListsSetItemMode()
   nnoremap <buffer><silent> <S-Tab> :VimTodoListsDecreaseIndent<CR>
   vnoremap <buffer><silent> <Tab> :VimTodoListsIncreaseIndent<CR>
   vnoremap <buffer><silent> <S-Tab> :VimTodoListsDecreaseIndent<CR>
-  inoremap <buffer><silent> <Tab> <ESC>:VimTodoListsIncreaseIndent<CR>A
-  inoremap <buffer><silent> <S-Tab> <ESC>:VimTodoListsDecreaseIndent<CR>A
 endfunction
 
 " Appends date at the end of the line
