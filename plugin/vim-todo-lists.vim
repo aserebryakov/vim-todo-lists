@@ -480,7 +480,7 @@ if !exists('g:vimtodolists_plugin')
   "Defining auto commands
   augroup vimtodolists_auto_commands
     autocmd!
-    autocmd BufRead,BufNewFile *.todo.md call VimTodoListsInit()
+    autocmd BufRead,BufNewFile todo.md,*.todo.md call VimTodoListsInit()
     autocmd FileType todo call VimTodoListsInit()
   augroup end
 
