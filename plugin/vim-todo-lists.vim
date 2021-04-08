@@ -20,10 +20,14 @@
 " FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 " IN THE SOFTWARE.
 
-
 " Initializes plugin settings and mappings
-function! VimTodoListsInit()
-  set filetype=todo
+" Hack to fix infinit loop on set filetype command
+function VimTodoListsInit()
+    " Just set this and let the autocommand do the rest of the work.
+    set filetype=todo
+endfunction
+
+function! VimTodoListsPostInit()
 
   " Keep the same indent as on the current line or always makes a root item
   if !exists('g:VimTodoListsKeepSameIndent')
@@ -34,6 +38,10 @@ function! VimTodoListsInit()
     let g:VimTodoListsDatesEnabled = 0
   endif
 
+  if !exists('g:VimTodoListsDateCompleteEnabled')
+    let g:VimTodoListsDateCompleteEnabled = 0
+  endif
+
   if !exists('g:VimTodoListsDatesFormat')
     let g:VimTodoListsDatesFormat = "%X, %d %b %Y"
   endif
@@ -42,6 +50,7 @@ function! VimTodoListsInit()
   setlocal shiftwidth=2 expandtab
   setlocal cursorline
   setlocal noautoindent
+  setlocal nosi
 
   call VimTodoListsInitializeTokens()
   call VimTodoListsInitializeSyntax()
@@ -90,6 +99,11 @@ endfunction
 function! VimTodoListsSetItemDone(lineno)
   let l:line = getline(a:lineno)
   call setline(a:lineno, substitute(l:line, '^\(\s*\)'.g:VimTodoListsUndoneItemEscaped, '\1'.g:VimTodoListsDoneItem, ''))
+  if(g:VimTodoListsDateCompleteEnabled == 1)
+    let l:line = getline(a:lineno)
+    let l:date = strftime(g:VimTodoListsDatesFormat)
+    call setline(a:lineno, substitute(l:line, '$', ' (Done - '.l:date.')', ''))
+  endif
 endfunction
 
 
@@ -97,6 +111,20 @@ endfunction
 function! VimTodoListsSetItemNotDone(lineno)
   let l:line = getline(a:lineno)
   call setline(a:lineno, substitute(l:line, '^\(\s*\)'.g:VimTodoListsDoneItemEscaped, '\1'.g:VimTodoListsUndoneItem, ''))
+  "if date complete flag is enabled the assume that we have a date at the end and see if we can substitute it.
+  if(g:VimTodoListsDateCompleteEnabled == 1)
+    "Get a very specific filter expression to substitute in the hopes that we don't delete something we shouldn't.
+    "A bit of a hack.  First, we have strftime return a formatted time based on current dates format.  Must match as if we were appending.
+    let l:date = strftime(g:VimTodoListsDatesFormat)
+    "Then, we replace all alpha-numeric values in that date and time with '.' characters, regex matches this to any character.
+    let l:datefilter = substitute(l:date, '[0-9A-z]', '.', 'g')
+    "Get the line again.
+    let l:line = getline(a:lineno)
+    "Search for our filtered expression at the end of the line, and delete it.
+    "note, there is a very slim chance of deleting something we shouldn't because it looked like something that would match the current time format....
+    "I leave this problem to smarter people than I to figure out.
+    call setline(a:lineno, substitute(l:line, ' (Done - '.l:datefilter.')$', '', ''))
+  endif
 endfunction
 
 
@@ -388,6 +416,7 @@ function! VimTodoListsAppendDate()
   endif
 endfunction
 
+
 " Creates a new item above the current line with the same indent
 function! VimTodoListsCreateNewItemAbove()
   execute "normal! O" . VimTodoListsIdent() . g:VimTodoListsUndoneItem . " "
@@ -481,7 +510,9 @@ if !exists('g:vimtodolists_plugin')
   augroup vimtodolists_auto_commands
     autocmd!
     autocmd BufRead,BufNewFile *.todo.md call VimTodoListsInit()
-    autocmd FileType todo call VimTodoListsInit()
+    " Modified to call post init, as the filetype is already todo.
+    " This avoids an infinite loop.
+    autocmd FileType todo call VimTodoListsPostInit()
   augroup end
 
   "Defining plugin commands
