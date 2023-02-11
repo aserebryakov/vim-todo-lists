@@ -482,6 +482,7 @@ if !exists('g:vimtodolists_plugin')
     autocmd!
     autocmd BufRead,BufNewFile *.todo.md call VimTodoListsInit()
     autocmd FileType todo call VimTodoListsInit()
+    autocmd FileType todo setlocal foldmethod=indent
   augroup end
 
   "Defining plugin commands
